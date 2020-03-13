@@ -535,6 +535,69 @@ for (i in (cpp_24bp_pass_GC_threshold$`Tm`)){
 #and a Tm between 50 ane 60, we need to also make sure there are no outliers
 #we want to make sure that there are no primers that are above a range of 5 degrees from one another
 
+-------------------------------------------------------------------------------------------------------------------------------
+Ange
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+###############################################################################################3
+#### Ange's Code: Finding primers and complement primer strands that begin and end with G/C
+###############################################################################################
+
+
+### Complement strand
+Allcomplementprecursors<-list(complement_primer_precursor_17,complement_primer_precursor_18,
+     complement_primer_precursor_19,complement_primer_precursor_20,
+     complement_primer_precursor_21,complement_primer_precursor_22,
+     complement_primer_precursor_23)
+
+list_of_good_complement_precursors <- list()
+
+for(file in Allcomplementprecursors){
+  #removing rows that start with A or T
+whichcol <-1
+Lastcall <- file[ ,whichcol]
+NotAorT<- !(Lastcall %in% c("A","T"))
+file <-file[NotAorT, ]
+
+#removing rows that end with A or T
+whichcol <-ncol(file)
+Lastcall <- file[ ,whichcol]
+NotAorT<- !(Lastcall %in% c("A","T"))
+list_of_good_complement_precursors[[ncol(file) - 17]] <- file[NotAorT, ]
+ 
+}
+
+good_complement_precursors <- bind_rows(list_of_good_complement_precursors)
+good_complement_precursors
+
+####### Primer precursor strand 
+
+Allprimerprecursors<-list(primer_precursor_17,primer_precursor_18,
+                              primer_precursor_19,primer_precursor_20,
+                              primer_precursor_21,primer_precursor_22,
+                              primer_precursor_23)
+
+list_of_good_primer_precursors <- list()
+for(file in Allprimerprecursors){
+  whichcol <-1
+  Lastcall <- file[ ,whichcol]
+  NotAorT<- !(Lastcall %in% c("A","T"))
+  file <-file[NotAorT, ]
+  
+  
+  whichcol <-ncol(file)
+  Lastcall <- file[ ,whichcol]
+  NotAorT<- !(Lastcall %in% c("A","T"))
+  file <-file[NotAorT, ]
+  list_of_good_primer_precursors[[ncol(file) - 17]] <- file
+  
+}
+
+good_primer_precursors <- bind_rows(list_of_good_primer_precursors)
+good_primer_precursors
+
+
 
                                        
 
