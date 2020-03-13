@@ -176,4 +176,365 @@ complement_primer_precursors <- bind_rows(complement_primer_precursor_17, comple
                                           complement_primer_precursor_19, complement_primer_precursor_20, 
                                           complement_primer_precursor_21, complement_primer_precursor_22, 
                                           complement_primer_precursor_23, .id = NULL)
+                                          
+                                          
+                                          
+                                          
+########################################################
+#Emma Code for Gc
+
+#For the first row in the complementary primers:
+
+#We will use the R package,  seqinr  which is frequently used by biologists for sequence manipulation.
+
+install.packages("seqinr")
+library(seqinr)
+
+#calculate the gc content of each row in 18bp primers
+cpp_18_GC <-apply(as.matrix(complement_primer_precursor_17), MARGIN = 1, FUN = GC)
+
+#calculate the gc content of each row in 19bp primers
+cpp_19_GC <-apply(as.matrix(complement_primer_precursor_18), MARGIN = 1, FUN = GC)
+
+#calculate the gc content of each row in 20bp primers
+cpp_20_GC <-apply(as.matrix(complement_primer_precursor_19), MARGIN = 1, FUN = GC)
+
+#calculate the gc content of each row in 21bp primers
+cpp_21_GC <-apply(as.matrix(complement_primer_precursor_20), MARGIN = 1, FUN = GC)
+
+#calculate the gc content of each row in 22bp primers
+cpp_22_GC <-apply(as.matrix(complement_primer_precursor_21), MARGIN = 1, FUN = GC)
+
+#calculate the gc content of each row in 23bp primers
+cpp_23_GC <-apply(as.matrix(complement_primer_precursor_22), MARGIN = 1, FUN = GC)
+
+#calculate the gc content of each row in 24bp primers
+cpp_24_GC <-apply(as.matrix(complement_primer_precursor_23), MARGIN = 1, FUN = GC)
+
+#merge data so that the potential primers have their associated GC
+complement_primer_precursor_17["GC Content"] <- cpp_18_GC
+complement_primer_precursor_18["GC Content"] <- cpp_19_GC
+complement_primer_precursor_19["GC Content"] <- cpp_20_GC
+complement_primer_precursor_20["GC Content"] <- cpp_21_GC
+complement_primer_precursor_21["GC Content"] <- cpp_22_GC
+complement_primer_precursor_22["GC Content"] <- cpp_23_GC
+complement_primer_precursor_23["GC Content"] <- cpp_24_GC
+
+
+#remove primers that are not within 50-60%
+#we can do this through dplyr
+library(dplyr)
+
+##this will return values that are greater than or equal to 0.4
+
+#for loop that takes the GC content of the complement_primer_precursor$GC Content column
+#if the GC content >= 0.4 and <=0.6, it will create a new file called cpp_(bplenght)bp_pass_GC_threshold
+
+#18bp
+for (i in (complement_primer_precursor_17$`GC Content`)){
+  cpp_18bp_pass_GC_threshold <- subset(complement_primer_precursor_17,(complement_primer_precursor_17$`GC Content`)>=0.4 & (complement_primer_precursor_17$`GC Content`)<=0.6)
+}
+
+#19bp
+for (i in (complement_primer_precursor_18$`GC Content`)){
+  cpp_19bp_pass_GC_threshold <- subset(complement_primer_precursor_18,(complement_primer_precursor_18$`GC Content`)>=0.4 & (complement_primer_precursor_18$`GC Content`)<=0.6)
+}
+
+#20bp
+for (i in (complement_primer_precursor_19$`GC Content`)){
+  cpp_20bp_pass_GC_threshold <- subset(complement_primer_precursor_19,(complement_primer_precursor_19$`GC Content`)>=0.4 & (complement_primer_precursor_19$`GC Content`)<=0.6)
+}
+#21bp
+for (i in (complement_primer_precursor_20$`GC Content`)){
+  cpp_21bp_pass_GC_threshold <- subset(complement_primer_precursor_20,(complement_primer_precursor_20$`GC Content`)>=0.4 & (complement_primer_precursor_20$`GC Content`)<=0.6)
+}
+
+#22bp
+for (i in (complement_primer_precursor_21$`GC Content`)){
+  cpp_22bp_pass_GC_threshold <- subset(complement_primer_precursor_21,(complement_primer_precursor_21$`GC Content`)>=0.4 & (complement_primer_precursor_21$`GC Content`)<=0.6)
+}
+
+#23bp
+for (i in (complement_primer_precursor_22$`GC Content`)){
+  cpp_23bp_pass_GC_threshold <- subset(complement_primer_precursor_22,(complement_primer_precursor_22$`GC Content`)>=0.4 & (complement_primer_precursor_22$`GC Content`)<=0.6)
+}
+
+#24bp
+for (i in (complement_primer_precursor_23$`GC Content`)){
+  cpp_24bp_pass_GC_threshold <- subset(complement_primer_precursor_23,(complement_primer_precursor_23$`GC Content`)>=0.4 & (complement_primer_precursor_23$`GC Content`)<=0.6)
+}
+
+
+#######################################################################################################
+#EmmaCodeforTm
+
+#############################################################################
+###calculate the Tm of a primer through the TmCalculator package
+install.packages("TmCalculator")
+library(TmCalculator)
+#
+##run the TmCalculator on one sample to see if it works
+##there are three different ways to calcualte Tm, based off of GC/based off of other nucleotides, and ther Wallace Method
+##we will need to convert into strings in order for this function to work
+##Output is 52
+install.packages("Biostrings")
+library(Biostrings)
+
+#for loop to find the Tm of the first primer precursor, need to figure out how to run over all rows
+#18bp primers by row
+
+for (i in nrow(cpp_18bp_pass_GC_threshold)){
+  cpp_18bp_pass_GC_threshold_Tm <- (apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[1])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm,apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[2])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[3])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm,apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[4])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[5])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[6])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[7])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[8])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[9])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[10])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[11])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[12])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[13])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[14])), MARGIN = 1, FUN = Tm_NN))
+  cpp_18bp_pass_GC_threshold_Tm <- rbind(cpp_18bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[15])), MARGIN = 1, FUN = Tm_NN))
+}
+
+
+
+#add column to the primers that passed the GC threshold 
+cpp_18bp_pass_GC_threshold <- cbind(cpp_18bp_pass_GC_threshold, cpp_18bp_pass_GC_threshold_Tm)
+print(cpp_18bp_pass_GC_threshold)
+
+#19bp primers by row
+
+for (i in nrow(cpp_19bp_pass_GC_threshold)){
+  cpp_19bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[1])), MARGIN = 1, FUN = Tm_NN)
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[2])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[3])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[4])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[5])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[6])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[7])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[8])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[9])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[10])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[11])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[12])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[13])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[14])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[15])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[16])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[17])), MARGIN = 1, FUN = Tm_NN))
+  cpp_19bp_pass_GC_threshold_Tm <- rbind(cpp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[18])), MARGIN = 1, FUN = Tm_NN))
+}
+
+
+#add column to the primers that passed the GC threshold 
+cpp_19bp_pass_GC_threshold <- cbind(cpp_19bp_pass_GC_threshold, cpp_19bp_pass_GC_threshold_Tm)
+print(cpp_19bp_pass_GC_threshold)
+
+#20bp primers by row
+
+for (i in nrow(cpp_20bp_pass_GC_threshold)){
+  cpp_20bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[1])), MARGIN = 1, FUN = Tm_NN)
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[2])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[3])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[4])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[5])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[6])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[7])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[8])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[9])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[10])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[11])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[12])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[13])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[14])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[15])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[16])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[17])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[18])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[19])), MARGIN = 1, FUN = Tm_NN))
+  cpp_20bp_pass_GC_threshold_Tm <- rbind(cpp_20bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[20])), MARGIN = 1, FUN = Tm_NN))
+}
+
+
+#add column to the primers that passed the GC threshold 
+cpp_20bp_pass_GC_threshold <- cbind(cpp_20bp_pass_GC_threshold, cpp_20bp_pass_GC_threshold_Tm)
+print(cpp_20bp_pass_GC_threshold)
+
+
+#21bp primers by row
+
+for (i in nrow(cpp_21bp_pass_GC_threshold)){
+  cpp_21bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[1])), MARGIN = 1, FUN = Tm_NN)
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[2])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[3])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[4])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[5])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[6])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[7])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[8])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[9])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[10])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[11])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[12])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[13])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[14])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[15])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[16])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[17])), MARGIN = 1, FUN = Tm_NN))
+  cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[18])), MARGIN = 1, FUN = Tm_NN))
+}
+
+#add column to the primers that passed the GC threshold 
+cpp_21bp_pass_GC_threshold <- cbind(cpp_21bp_pass_GC_threshold, cpp_21bp_pass_GC_threshold_Tm)
+print(cpp_21bp_pass_GC_threshold)
+
+
+
+#22BP
+for (i in nrow(cpp_22bp_pass_GC_threshold)){
+  cpp_22bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[1])), MARGIN = 1, FUN = Tm_NN)
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[2])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[3])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[4])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[5])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[6])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[7])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[8])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[9])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[10])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[11])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[12])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[13])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[14])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[15])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[16])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[17])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[18])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[19])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[20])), MARGIN = 1, FUN = Tm_NN))
+  cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[21])), MARGIN = 1, FUN = Tm_NN))
+  }
+
+#add column to the primers that passed the GC threshold 
+cpp_22bp_pass_GC_threshold <- cbind(cpp_22bp_pass_GC_threshold, cpp_22bp_pass_GC_threshold_Tm)
+print(cpp_22bp_pass_GC_threshold)
+
+
+#23bp
+for (i in nrow(cpp_23bp_pass_GC_threshold)){
+  cpp_23bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[1])), MARGIN = 1, FUN = Tm_NN)
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[2])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[3])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[4])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[5])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[6])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[7])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[8])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[9])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[10])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[11])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[12])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[13])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[14])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[15])), MARGIN = 1, FUN = Tm_NN))
+  cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[16])), MARGIN = 1, FUN = Tm_NN))
+}
+
+#add column to the primers that passed the GC threshold 
+cpp_23bp_pass_GC_threshold <- cbind(cpp_23bp_pass_GC_threshold, cpp_23bp_pass_GC_threshold_Tm)
+print(cpp_23bp_pass_GC_threshold)
+
+
+
+#24BP
+for (i in nrow(cpp_24bp_pass_GC_threshold)){
+  cpp_24bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[1])), MARGIN = 1, FUN = Tm_NN)
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[2])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[3])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[4])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[5])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[6])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[7])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[8])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[9])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[10])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[11])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[12])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[13])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[14])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[15])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[16])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[17])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[18])), MARGIN = 1, FUN = Tm_NN))
+  cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[19])), MARGIN = 1, FUN = Tm_NN))
+}
+
+#add column to the primers that passed the GC threshold 
+cpp_24bp_pass_GC_threshold <- cbind(cpp_24bp_pass_GC_threshold, cpp_24bp_pass_GC_threshold_Tm)
+print(cpp_24bp_pass_GC_threshold)
+
+
+#rename column names
+colnames(cpp_18bp_pass_GC_threshold)[20] <- "Tm"
+colnames(cpp_19bp_pass_GC_threshold)[21] <- "Tm"
+colnames(cpp_20bp_pass_GC_threshold)[22] <- "Tm"
+colnames(cpp_21bp_pass_GC_threshold)[23] <- "Tm"
+colnames(cpp_22bp_pass_GC_threshold)[24] <- "Tm"
+colnames(cpp_23bp_pass_GC_threshold)[25] <- "Tm"
+colnames(cpp_24bp_pass_GC_threshold)[26] <- "Tm"
+
+
+names(cpp_18bp_pass_GC_threshold)[names(cpp_18bp_pass_GC_threshold) == "cpp_18bp_pass_GC_threshold_tm"] <- "Tm"
+
+#filter out the Tm that are not within 50-60 degrees
+#lets try the subset function, similar to what we did with gc content
+
+#18bp
+for (i in (cpp_18bp_pass_GC_threshold$`Tm`)){
+  cpp_18bp_pass_GC_and_Tm_threshold <- subset(cpp_18bp_pass_GC_threshold,(cpp_18bp_pass_GC_threshold$`Tm`)>=50 & (cpp_18bp_pass_GC_threshold$`Tm`)<=60)
+}
+
+#19bp
+for (i in (cpp_19bp_pass_GC_threshold$`Tm`)){
+  cpp_19bp_pass_GC_and_Tm_threshold <- subset(cpp_19bp_pass_GC_threshold,(cpp_19bp_pass_GC_threshold$`Tm`)>=50 & (cpp_19bp_pass_GC_threshold$`Tm`)<=60)
+}
+
+#20bp
+for (i in (cpp_20bp_pass_GC_threshold$`Tm`)){
+  cpp_20bp_pass_GC_and_Tm_threshold <- subset(cpp_20bp_pass_GC_threshold,(cpp_20bp_pass_GC_threshold$`Tm`)>=50 & (cpp_20bp_pass_GC_threshold$`Tm`)<=60)
+}
+
+#21
+for (i in (cpp_21bp_pass_GC_threshold$`Tm`)){
+  cpp_21bp_pass_GC_and_Tm_threshold <- subset(cpp_21bp_pass_GC_threshold,(cpp_21bp_pass_GC_threshold$`Tm`)>=50 & (cpp_21bp_pass_GC_threshold$`Tm`)<=60)
+}
+
+#22
+for (i in (cpp_22bp_pass_GC_threshold$`Tm`)){
+  cpp_22bp_pass_GC_and_Tm_threshold <- subset(cpp_22bp_pass_GC_threshold,(cpp_22bp_pass_GC_threshold$`Tm`)>=50 & (cpp_22bp_pass_GC_threshold$`Tm`)<=60)
+}
+
+#23
+for (i in (cpp_23bp_pass_GC_threshold$`Tm`)){
+  cpp_23bp_pass_GC_and_Tm_threshold <- subset(cpp_23bp_pass_GC_threshold,(cpp_23bp_pass_GC_threshold$`Tm`)>=50 & (cpp_23bp_pass_GC_threshold$`Tm`)<=60)
+}
+
+#24
+for (i in (cpp_24bp_pass_GC_threshold$`Tm`)){
+  cpp_24bp_pass_GC_and_Tm_threshold <- subset(cpp_24bp_pass_GC_threshold,(cpp_24bp_pass_GC_threshold$`Tm`)>=50 & (cpp_24bp_pass_GC_threshold$`Tm`)<=60)
+}
+
+
+
+#now that we have the primers that contain both a gc content betwwen 0.4-0 and 0.6
+#and a Tm between 50 ane 60, we need to also make sure there are no outliers
+#we want to make sure that there are no primers that are above a range of 5 degrees from one another
+
+
+                                       
 
