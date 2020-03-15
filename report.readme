@@ -1,32 +1,46 @@
 # ECEV-320-final-project_primer-design
-Goal:
+
+
+1.Goal:
 
 Import: plasmid DNA sequence, and the location of the start and end point of the DNA sequence of interest.
 Import requirement: single-stranded DNA sequence in .txt file (nor space, tab, comma separated, all upper case)
 
 Export: all possible primer combinations that meet certain rules.  
 
-General strategy outline:
 
-1. Import DNA sequence file (.txt format); (Chufan)
-2. Enter the location of the start and end point of the DNA sequence of interest. (Chufan)
-For example: enter 1650 and 1820; Figure out how to enumerate nucleotides into number#bp;
-3. The code generates all possible 18-24 bp length forward DNAs around the start point; (Chufan)
-4. The code generates all possible 18-24 bp length reverse DNAs around the end point. ( Chufan)
-5. Transform all 18-24 bp long DNA sequences into primer sequences: complementary. ( Chufan) 
-6. The code calculates several scores and gets rid of the unsuitable ones. (Emma)
+2.The primers generatd by the code meet the following standards along with the explaination:
 
-40-60% G/C content
-Count(G + C)/Count(A + T + G + C) * 100%
-Melting temperature (Tm) of 50-60°C
+  1) 40-60% G/C content:
+
+  2) Melting temperature (Tm) of 50-60°C:
+
+  3) 
+
+
+
+
+3.General strategy outline:
+
+  1. Import DNA sequence file (.txt format); (Chufan)
+  2. Enter the location of the start and end point of the DNA sequence of interest. (Chufan)
+  For example: enter 1650 and 1820; Figure out how to enumerate nucleotides into number#bp;
+  3. The code generates all possible 18-24 bp length forward DNAs around the start point; (Chufan)
+  4. The code generates all possible 18-24 bp length reverse DNAs around the end point. ( Chufan)
+  5. Transform all 18-24 bp long DNA sequences into primer sequences: complementary. ( Chufan) 
+  6. The code calculates several scores and gets rid of the unsuitable ones. (Emma)
+
+
+
+
 Primer pairs should have a Tm within 5°C of each other
-Will add to previous for loop. Will need to filter out any outliers that have melting temp >6 degrees apart. 
+
 
 Make sure there are no highly repetitive sequences (maybe, it might be too hard) True, there are too many combinations
 This can be added in the beginning. You can look at primer pairs and filter out those that have >4 repeats. 
 Primer pairs should not have complementary regions (maybe, hard)True, there are too many combinations
 
-7. Return the primer list.
+  7. Return the primer list.
 
 
 More complicated strategies if time allows:
@@ -41,6 +55,6 @@ Melting temperature (Tm) of 50-60°C
 Primer pairs should have a Tm within 5°C of each other
 
 
-Limitations:
+4.Limitations:
 
 The program only finds out primers that must include the imputed starting point, or end point. 
