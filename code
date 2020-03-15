@@ -177,8 +177,8 @@ complement_primer_precursors <- bind_rows(complement_primer_precursor_17, comple
                                           complement_primer_precursor_21, complement_primer_precursor_22, 
                                           complement_primer_precursor_23, .id = NULL)
                                           
-#For the first row in the complementary primers:
-
+#####################################################################################################################
+##Emma Code for primer precursor, GC
 #We will use the R package,  seqinr  which is frequently used by biologists for sequence manipulation.
 
 install.packages("seqinr")
@@ -260,18 +260,17 @@ for (i in (primer_precursor_23$`GC Content`)){
 
 
 #######################################################################################################
-#
+#Emma code for primer precursor, Tm calculations
 ###calculate the Tm of a primer through the TmCalculator package
 install.packages("TmCalculator")
 library(TmCalculator)
-#
-##run the TmCalculator on one sample to see if it works
-##there are three different ways to calcualte Tm, based off of GC/based off of other nucleotides, and the Wallace Method (good for primer 14-20bp)
 
+##there are three different ways to calcualte Tm, based off of GC/based off of other nucleotides, and the Wallace Method (good for primer 14-20bp)
 ##we will use the Tm_NN function which takes into account the bases as well as ionic concentrations of the PCR reaction
+#Tm_NN(nearest neighbor thermodynamics) is considered to be the most accurate of the Tm methods, as it takes into account primer content rather than biasing off of primer length
 #you can change the input of the pcr reaction ionic concentrations using this method
-##we will need to convert into strings in order for this function to work
-##Output is 52
+##we will need to convert into strings in order for this function to work, using the Biostrings package
+
 install.packages("Biostrings")
 library(Biostrings)
 
@@ -524,16 +523,16 @@ for (i in (pp_24bp_pass_GC_threshold$`Tm`)){
 
 
 #now that we have the primers that contain both a gc content betwwen 0.4-0 and 0.6
-#and a Tm between 50 ane 60
+#and a Tm between 50 and 60
 
 #########################################################################################
 
-#Emma Code for Gc, Complementary Primer Precursor
+#Emma Code for complementary primer precursor, GC
 
 #For the first row in the complementary primers:
 
 #We will use the R package,  seqinr  which is frequently used by biologists for sequence manipulation.
-install.packages("seqinr")
+
 library(seqinr)
 
 #calculate the gc content of each row in 18bp primers
@@ -612,16 +611,17 @@ for (i in (complement_primer_precursor_23$`GC Content`)){
 
 
 #######################################################################################################
-#EmmaCodeforTm
+#Emma code for Tm, complementary primer precursor
 
 #############################################################################
 ###calculate the Tm of a primer through the TmCalculator package
 library(TmCalculator)
-#
-##run the TmCalculator on one sample to see if it works
-##there are three different ways to calcualte Tm, based off of GC/based off of other nucleotides, and ther Wallace Method
-##we will need to convert into strings in order for this function to work
-##Output is 52
+
+##there are three different ways to calcualte Tm, based off of GC/based off of other nucleotides, and the Wallace Method (good for primer 14-20bp)
+##we will use the Tm_NN function which takes into account the bases as well as ionic concentrations of the PCR reaction
+#Tm_NN(nearest neighbor thermodynamics) is considered to be the most accurate of the Tm methods, as it takes into account primer content rather than biasing off of primer length
+#you can change the input of the pcr reaction ionic concentrations using this method
+##we will need to convert into strings in order for this function to work, using the Biostrings package
 
 library(Biostrings)
 
