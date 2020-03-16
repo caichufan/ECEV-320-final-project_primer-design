@@ -379,7 +379,7 @@ for (i in nrow(pp_21bp_pass_GC_threshold)){
   pp_21bp_pass_GC_threshold_Tm <- rbind(pp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_21bp_pass_GC_threshold[15,])), MARGIN = 1, FUN = Tm_NN))
   pp_21bp_pass_GC_threshold_Tm <- rbind(pp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_21bp_pass_GC_threshold[16,])), MARGIN = 1, FUN = Tm_NN))
   pp_21bp_pass_GC_threshold_Tm <- rbind(pp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_21bp_pass_GC_threshold[17,])), MARGIN = 1, FUN = Tm_NN))
-  pp_21bp_pass_GC_threshold_Tm <- rbind(pp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_21bp_pass_GC_threshold[18,])), MARGIN = 1, FUN = Tm_Wallace))
+  pp_21bp_pass_GC_threshold_Tm <- rbind(pp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_21bp_pass_GC_threshold[18,])), MARGIN = 1, FUN = Tm_NN))
 }
 
 #add column to the primers that passed the GC threshold 
