@@ -276,6 +276,8 @@ library(Biostrings)
 
 #for loop to find the Tm of the first primer precursor, need to figure out how to run over all rows
 #18bp primers by row
+#to determine how many rows there are, irrespective of row name (since some row names have already been filtered out)
+nrow(pp_18bp_pass_GC_threshold)
 
 for (i in nrow(pp_18bp_pass_GC_threshold)){
   pp_18bp_pass_GC_threshold_Tm <- (apply(as.matrix(c2s(pp_18bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN))
@@ -303,6 +305,8 @@ print(pp_18bp_pass_GC_threshold)
 
 #19bp primers by row
 
+nrow(pp_19bp_pass_GC_threshold)
+
 for (i in nrow(pp_19bp_pass_GC_threshold)){
   pp_19bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(pp_19bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   pp_19bp_pass_GC_threshold_Tm <- rbind(pp_19bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_19bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -329,6 +333,8 @@ pp_19bp_pass_GC_threshold <- cbind(pp_19bp_pass_GC_threshold, pp_19bp_pass_GC_th
 print(pp_19bp_pass_GC_threshold)
 
 #20bp primers by row
+
+nrow(pp_20bp_pass_GC_threshold)
 
 for (i in nrow(pp_20bp_pass_GC_threshold)){
   pp_20bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(pp_20bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
@@ -361,6 +367,8 @@ print(pp_20bp_pass_GC_threshold)
 
 #21bp primers by row
 
+nrow(pp_21bp_pass_GC_threshold)
+
 for (i in nrow(pp_21bp_pass_GC_threshold)){
   pp_21bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(pp_21bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   pp_21bp_pass_GC_threshold_Tm <- rbind(pp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_21bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -389,6 +397,9 @@ print(pp_21bp_pass_GC_threshold)
 
 
 #22BP
+
+nrow(pp_22bp_pass_GC_threshold)
+
 for (i in nrow(pp_22bp_pass_GC_threshold)){
   pp_22bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(pp_22bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   pp_22bp_pass_GC_threshold_Tm <- rbind(pp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_22bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -419,6 +430,9 @@ print(pp_22bp_pass_GC_threshold)
 
 
 #23bp
+
+nrow(pp_23bp_pass_GC_threshold)
+
 for (i in nrow(pp_23bp_pass_GC_threshold)){
   pp_23bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(pp_23bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   pp_23bp_pass_GC_threshold_Tm <- rbind(pp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_23bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -445,6 +459,9 @@ print(pp_23bp_pass_GC_threshold)
 
 
 #24BP
+
+nrow(pp_24bp_pass_GC_threshold)
+
 for (i in nrow(pp_24bp_pass_GC_threshold)){
   pp_24bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(pp_24bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   pp_24bp_pass_GC_threshold_Tm <- rbind(pp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(pp_24bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -625,8 +642,10 @@ library(TmCalculator)
 
 library(Biostrings)
 
-#for loop to find the Tm of the first primer precursor, need to figure out how to run over all rows
+#for loop to find the Tm of the first primer precursor
 #18bp primers by row
+
+nrow(cpp_18bp_pass_GC_threshold)
 
 for (i in nrow(cpp_18bp_pass_GC_threshold)){
   cpp_18bp_pass_GC_threshold_Tm <- (apply(as.matrix(c2s(cpp_18bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN))
@@ -653,6 +672,8 @@ cpp_18bp_pass_GC_threshold <- cbind(cpp_18bp_pass_GC_threshold, cpp_18bp_pass_GC
 print(cpp_18bp_pass_GC_threshold)
 
 #19bp primers by row
+
+nrow(cpp_19bp_pass_GC_threshold)
 
 for (i in nrow(cpp_19bp_pass_GC_threshold)){
   cpp_19bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_19bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
@@ -681,6 +702,8 @@ cpp_19bp_pass_GC_threshold <- cbind(cpp_19bp_pass_GC_threshold, cpp_19bp_pass_GC
 print(cpp_19bp_pass_GC_threshold)
 
 #20bp primers by row
+
+nrow(cpp_20bp_pass_GC_threshold)
 
 for (i in nrow(cpp_20bp_pass_GC_threshold)){
   cpp_20bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_20bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
@@ -713,6 +736,8 @@ print(cpp_20bp_pass_GC_threshold)
 
 #21bp primers by row
 
+nrow(cpp_21bp_pass_GC_threshold)
+
 for (i in nrow(cpp_21bp_pass_GC_threshold)){
   cpp_21bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   cpp_21bp_pass_GC_threshold_Tm <- rbind(cpp_21bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_21bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -741,6 +766,9 @@ print(cpp_21bp_pass_GC_threshold)
 
 
 #22BP
+
+nrow(cpp_22bp_pass_GC_threshold)
+
 for (i in nrow(cpp_22bp_pass_GC_threshold)){
   cpp_22bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   cpp_22bp_pass_GC_threshold_Tm <- rbind(cpp_22bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_22bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -771,6 +799,9 @@ print(cpp_22bp_pass_GC_threshold)
 
 
 #23bp
+
+nrow(cpp_23bp_pass_GC_threshold)
+
 for (i in nrow(cpp_23bp_pass_GC_threshold)){
   cpp_23bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   cpp_23bp_pass_GC_threshold_Tm <- rbind(cpp_23bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_23bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
@@ -797,6 +828,9 @@ print(cpp_23bp_pass_GC_threshold)
 
 
 #24BP
+
+nrow(cpp_24bp_pass_GC_threshold)
+
 for (i in nrow(cpp_24bp_pass_GC_threshold)){
   cpp_24bp_pass_GC_threshold_Tm <- apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN)
   cpp_24bp_pass_GC_threshold_Tm <- rbind(cpp_24bp_pass_GC_threshold_Tm, apply(as.matrix(c2s(cpp_24bp_pass_GC_threshold[2,])), MARGIN = 1, FUN = Tm_NN))
