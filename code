@@ -219,8 +219,6 @@ primer_precursor_23["GC Content"] <- pp_24_GC
 #we can do this through dplyr
 library(dplyr)
 
-##this will return values that are greater than or equal to 0.4
-
 #for loop that takes the GC content of the complement_primer_precursor$GC Content column
 #if the GC content >= 0.4 and <=0.6, it will create a new file called cpp_(bplenght)bp_pass_GC_threshold
 
@@ -587,7 +585,6 @@ complement_primer_precursor_23["GC Content"] <- cpp_24_GC
 #we can do this through dplyr
 library(dplyr)
 
-##this will return values that are greater than or equal to 0.4
 
 #for loop that takes the GC content of the complement_primer_precursor$GC Content column
 #if the GC content >= 0.4 and <=0.6, it will create a new file called cpp_(bplenght)bp_pass_GC_threshold
