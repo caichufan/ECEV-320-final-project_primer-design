@@ -215,7 +215,7 @@ primer_precursor_22["GC Content"] <- pp_23_GC
 primer_precursor_23["GC Content"] <- pp_24_GC
 
 
-#remove primers that are not within 50-60%
+#remove primers that are not within 40-60%
 #we can do this through dplyr
 library(dplyr)
 
@@ -581,7 +581,7 @@ complement_primer_precursor_22["GC Content"] <- cpp_23_GC
 complement_primer_precursor_23["GC Content"] <- cpp_24_GC
 
 
-#remove primers that are not within 50-60%
+#remove primers that are not within 40-60%
 #we can do this through dplyr
 library(dplyr)
 
