@@ -228,7 +228,7 @@ primer_precursor_23["GC Content"] <- pp_24_GC
 library(dplyr)
 
 #for loop that takes the GC content of the complement_primer_precursor$GC Content column
-#if the GC content >= 0.4 and <=0.6, it will create a new file called cpp_(bplenght)bp_pass_GC_threshold
+#if the GC content >= 0.4 and <=0.6, it will create a new file called cpp_(bplength)bp_pass_GC_threshold
 
 #18bp
 for (i in (primer_precursor_17$`GC Content`)){
@@ -283,7 +283,7 @@ library(Biostrings)
 #for loop to find the Tm of the first primer precursor, need to figure out how to run over all rows
 #18bp primers by row
 #to determine how many rows there are, irrespective of row name (since some row names have already been filtered out)
-nrow(pp_18bp_pass_GC_threshold)
+nrow(pp_18bp_pass_GC_threshold), which will aid in determining how many rows you need to run the function over
 
 for (i in nrow(pp_18bp_pass_GC_threshold)){
   pp_18bp_pass_GC_threshold_Tm <- (apply(as.matrix(c2s(pp_18bp_pass_GC_threshold[1,])), MARGIN = 1, FUN = Tm_NN))
@@ -556,6 +556,7 @@ for (i in (pp_24bp_pass_GC_threshold$`Tm`)){
 
 #We will use the R package,  seqinr  which is frequently used by biologists for sequence manipulation.
 
+install.packages('seqinr')
 library(seqinr)
 
 #calculate the gc content of each row in 18bp primers
@@ -589,7 +590,7 @@ complement_primer_precursor_22["GC Content"] <- cpp_23_GC
 complement_primer_precursor_23["GC Content"] <- cpp_24_GC
 
 
-#remove primers that are not within 40-60%
+#remove primers that are not within 40-60% (0.4-0.6)
 #we can do this through dplyr
 library(dplyr)
 
