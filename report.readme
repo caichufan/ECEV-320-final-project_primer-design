@@ -69,13 +69,28 @@ All primers generated are from 5’ to 3’, so no further reverse complement is
 
 5.Shortages of our code:
 Whether the primers are self or double complemented hasn’t been tested. Primer pairs should have a Tm within 5°C of each other. Make sure there are no highly repetitive sequences. You can look at primer pairs and filter out those that have >4 repeats. 
-Primer pairs should not have complementary regions. Primer pairs should have a Tm within 5°C of each other.
+Primer pairs should not have complementary regions. Primer pairs should have a Tm within 5°C of each other.(Need to explain why-I note why we cant have the primers have complementary regions below)
 
-Another current shortfall in our code for calculating the Tm of these primers, using the Tm_NN function, is in regards to the user inputting the number of rows present in the data frame 
+   Our code does not cover another essential aspect of PCR primer design, which involves primers that do not self-anneal, forming primer-primer interactions, alternatively called primer dimers. This step should
+be done after designing both forward and reverse primers. Primer dimers can form due to complementary bases in the sequences, thus leading to off-target amplification and inhibiting the amplification of the 
+DNA target sequence. While we note that primers should not have complementary regions, our code does not contain an algorithm that correctly predicts primer dimers. Many currently available programs caclulate
+and incorporate the Gibbs free energy (ΔG) of association in determining primer-dimer formation ( a ΔG of around (-5) to (-6) is standard, but is largely application based). Therefore, to 
+overcome this shortcoming, we recommend either using software, such as the OligoAnalyzer Tool by IDT, or the PrimerRoc algorithm developed by Johnson et al.(2019) to determine the presence of primer dimers
+once both forward and reverse strands are designed.  
+
+   Another current shortfall in our code for calculating the Tm of these primers, using the Tm_NN function, is in regards to the user inputting the number of rows present in the data frame 
 corresponding to the length of the primer. By adding in the nrow(dataframe) function, it is our hope that the user is able to determine how many rows to run the Tm_NN function over,
 and use the rbind function to take the Tm_NN of each row and create a new list of these Tm values. While this is not the most effiicent method for calculating the Tm, using the Tm_NN 
 function is considered to be the most accurate. In such, accurate calculations of melting points aid in overall PCR efficiency. Further updates on the code could ameliorate this potential
 shortcoming. 
 
 
+
+
+
+
+
+
+
+ 
 
