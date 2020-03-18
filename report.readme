@@ -1,61 +1,26 @@
-# ECEV-320-final-project_primer-design
+ECEV320 final project: primer design
+Ange Uwimana, Chufan Cai, Emma Wilkinson
 
-where you need to change: b value, path
+1.Why primer design is important:
 
-1.Goal:
+2.How the code works:
+Input: 
+1) a DNA sequence (the single strand DNA from a double strand DNA) arranged from 5’ to 3’ in a .txt file, not space, tab or comma separated and all upper case. 
+2) the exact position where the primers are required, enter as “b” in the code.
+Output:
+Two data frames: 1) all appropriate primers around position “b”, from 5’ to 3’; 2) all appropriate complement primers around position “b”, from 5’ to 3’;
+Example:
+Would like to PCR between 1680bp to 1900bp within a human TET2 plasmid. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
 
-Import: plasmid DNA sequence, and the location of the start and end point of the DNA sequence of interest.
-Import requirement: single-stranded DNA sequence in .txt file (nor space, tab, comma separated, all upper case)
+3.Dissection of each part of the code:
+Part I: Import DNA sequence, extract all possible primers and complement primers (precursors) with length range from 18 to 24 bp. (Chufan)
+Part II: Keep precursors that have 40-60% G/C content, and have a melting temperature (Tm) of 50-60°C. (Emma)
+Part III: Get rid of precursors that don’t start or end with ½ G/C. (Ange) 
 
-Export: all possible primer combinations that meet certain rules.  
+4.Strengths of our code:
+All primers generated are from 5’ to 3’, so no further reverse complement is needed.
 
+5.Shortages of our code:
+Whether the primers are self or double complemented hasn’t been tested. Primer pairs should have a Tm within 5°C of each other. Make sure there are no highly repetitive sequences. You can look at primer pairs and filter out those that have >4 repeats. 
+Primer pairs should not have complementary regions. Primer pairs should have a Tm within 5°C of each other.
 
-2.The primers generatd by the code meet the following standards along with the explaination:
-
-  1) 40-60% G/C content:
-
-  2) Melting temperature (Tm) of 50-60°C:
-
-  3) 
-
-
-
-
-3.General strategy outline:
-
-  1. Import DNA sequence file (.txt format); (Chufan)
-  2. Enter the location of the start and end point of the DNA sequence of interest. (Chufan)
-  For example: enter 1650 and 1820; Figure out how to enumerate nucleotides into number#bp;
-  3. The code generates all possible 18-24 bp length forward DNAs around the start point; (Chufan)
-  4. The code generates all possible 18-24 bp length reverse DNAs around the end point. ( Chufan)
-  5. Transform all 18-24 bp long DNA sequences into primer sequences: complementary. ( Chufan) 
-  6. The code calculates several scores and gets rid of the unsuitable ones. (Emma)
-
-
-
-
-Primer pairs should have a Tm within 5°C of each other
-
-
-Make sure there are no highly repetitive sequences (maybe, it might be too hard) True, there are too many combinations
-This can be added in the beginning. You can look at primer pairs and filter out those that have >4 repeats. 
-Primer pairs should not have complementary regions (maybe, hard)True, there are too many combinations
-
-  7. Return the primer list.
-
-
-More complicated strategies if time allows:
-1. Check complementary regions;
-2. Pull sequence from Addgene website instead of directly feeding the code with DNA sequence;
-
-Good primers definition:
-Length of 18-24 bases
-40-60% G/C content
-Start and end with 1-2 G/C pairs
-Melting temperature (Tm) of 50-60°C
-Primer pairs should have a Tm within 5°C of each other
-
-
-4.Limitations:
-
-The program only finds out primers that must include the imputed starting point, or end point. 
