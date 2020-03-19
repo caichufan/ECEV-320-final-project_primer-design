@@ -188,13 +188,10 @@ complement_primer_precursors <- bind_rows(complement_primer_precursor_17, comple
 #####################################################################################################################
 ##Emma Code for primer precursor, GC
 #We will first compute the GC content of the primer precursors generated from 18bp-24bp
-#We will use the R package,  seqinr  which is frequently used by biologists for sequence manipulation.
+#We will use the R package,  seqinr  which is frequently used by biologists for sequence manipulation
 
 install.packages("seqinr")
 library(seqinr)
-
-#using apply, we dictate the input (primer_precursor_#bp), MARGIN =1 means that this will run over rows
-#and FUN=GC means that the function we are running is the "GC" function from seqinr
 
 #calculate the gc content of each row in 18bp primers
 pp_18_GC <-apply(as.matrix(primer_precursor_17), MARGIN = 1, FUN = GC)
@@ -217,7 +214,7 @@ pp_23_GC <-apply(as.matrix(primer_precursor_22), MARGIN = 1, FUN = GC)
 #calculate the gc content of each row in 24bp primers
 pp_24_GC <-apply(as.matrix(primer_precursor_23), MARGIN = 1, FUN = GC)
 
-#merge GC data with the primer_precusors so that the potential primers have their associated GC
+#merge data so that the potential primers have their associated GC
 primer_precursor_17["GC Content"] <- pp_18_GC
 primer_precursor_18["GC Content"] <- pp_19_GC
 primer_precursor_19["GC Content"] <- pp_20_GC
@@ -260,7 +257,6 @@ pp_24bp_pass_GC_threshold <- filter(primer_precursor_23, primer_precursor_23$`GC
 #workflow is similar to primer precursors
 
 library(seqinr)
-
 #calculate the gc content of each row in 18bp primers
 cpp_18_GC <-apply(as.matrix(complement_primer_precursor_17), MARGIN = 1, FUN  = GC)
 
@@ -338,196 +334,50 @@ install.packages("Biostrings")
 library(Biostrings)
 
 
+####create empty vector and then run function over the rows
+#In the for loop the colon creates a sequence of numbers from 1 to 15, and loops over i = 1, i= 2, .... 
 
-#18bp primers by row
-#this tells the user how many rows the function will need to be run over
-nrow(pp_18bp_pass_GC_threshold)
-
-
-#######create empty vector and then run function over the rows
-
-#18bp by row
+#18bp
 pp_18bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(pp_18bp_pass_GC_threshold)){
-  pp_18bp_pass_GC_threshold_Tm <- c(pp_18bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[1,])))), 
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[2,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[3,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[4,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[5,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[6,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[7,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[8,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[9,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[10,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[11,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[12,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[13,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[14,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[15,])))))
-}                              
+for (i in 1:nrow(pp_18bp_pass_GC_threshold)){
+  pp_18bp_pass_GC_threshold_Tm <- c(pp_18bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[i,]))))
+}
 
 #19bp
-nrow(pp_19bp_pass_GC_threshold)
-
 pp_19bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(pp_19bp_pass_GC_threshold)){
-  pp_19bp_pass_GC_threshold_Tm <- c(pp_19bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[1,])))), 
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[2,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[3,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[4,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[5,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[6,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[7,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[8,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[9,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[10,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[11,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[12,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[13,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[14,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[15,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[16,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[17,])))),
-                                     (Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[18,])))))
-} 
+for (i in 1:nrow(pp_19bp_pass_GC_threshold)){
+  pp_19bp_pass_GC_threshold_Tm <- c(pp_19bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[i,]))))
+}
 
 #20bp
-nrow(pp_20bp_pass_GC_threshold)
-
 pp_20bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(pp_20bp_pass_GC_threshold)){
-  pp_20bp_pass_GC_threshold_Tm <- c(pp_20bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[18,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[19,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[20,])))))
-} 
-
+for (i in 1:nrow(pp_20bp_pass_GC_threshold)){
+  pp_20bp_pass_GC_threshold_Tm <- c(pp_20bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[i,]))))
+}
 
 #21bp
-nrow(pp_21bp_pass_GC_threshold)
-
 pp_21bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(pp_21bp_pass_GC_threshold)){
-  pp_21bp_pass_GC_threshold_Tm <- c(pp_21bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[18,])))))
-} 
+for (i in 1:nrow(pp_21bp_pass_GC_threshold)){
+  pp_21bp_pass_GC_threshold_Tm <- c(pp_21bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[i,]))))
+}
 
 #22bp
-nrow(pp_22bp_pass_GC_threshold)
-
 pp_22bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(pp_22bp_pass_GC_threshold)){
-  pp_22bp_pass_GC_threshold_Tm <- c(pp_22bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[18,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[19,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[20,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[21,])))))
-} 
+for (i in 1:nrow(pp_22bp_pass_GC_threshold)){
+  pp_22bp_pass_GC_threshold_Tm <- c(pp_22bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[i,]))))
+}
 
 #23bp
-nrow(pp_23bp_pass_GC_threshold)
-
 pp_23bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(pp_23bp_pass_GC_threshold)){
-  pp_23bp_pass_GC_threshold_Tm <- c(pp_23bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[16,])))))
+for (i in 1:nrow(pp_23bp_pass_GC_threshold)){
+  pp_23bp_pass_GC_threshold_Tm <- c(pp_23bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[i,]))))
 }
 
 #24bp
-nrow(pp_24bp_pass_GC_threshold)
-
 pp_24bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(pp_24bp_pass_GC_threshold)){
-  pp_24bp_pass_GC_threshold_Tm <- c(pp_24bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[18,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[19,])))))
+for (i in 1:nrow(pp_24bp_pass_GC_threshold)){
+  pp_24bp_pass_GC_threshold_Tm <- c(pp_24bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[i,]))))
 }
-
 
 
 #add Tm generated to pp_#bp_pass_GC_threshold
@@ -549,7 +399,6 @@ colnames(pp_23bp_pass_GC_threshold)[25] <- "Tm"
 colnames(pp_24bp_pass_GC_threshold)[26] <- "Tm"
 
 #filter out the Tm that are not within 50-60 degrees
-
 
 library(dplyr)
 
@@ -581,6 +430,7 @@ pp_24bp_pass_GC_and_Tm_threshold <- filter(pp_24bp_pass_GC_threshold, pp_24bp_pa
 
 #############################################################################################
 #calculate the Tm of the complementary primer precursors
+#workflow is similar to primer precursors Tm calculation
 
 
 library(TmCalculator)
@@ -594,194 +444,51 @@ library(TmCalculator)
 
 library(Biostrings)
 
-#18bp primers by row
-#this tells the user how many rows the function will need to be run over
-nrow(cpp_18bp_pass_GC_threshold)
+####create empty vector and then run function over the rows
+#In the for loop the colon creates a sequence of numbers from 1 to 15, and loops over i = 1, i= 2, .... 
 
-
-#######create empty vector and then run function over the rows
-
-#18bp 
+#18bp
 cpp_18bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(cpp_18bp_pass_GC_threshold)){
-  cpp_18bp_pass_GC_threshold_Tm <- c(cpp_18bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[15,])))))
-}                              
+for (i in 1:nrow(cpp_18bp_pass_GC_threshold)){
+  cpp_18bp_pass_GC_threshold_Tm <- c(cpp_18bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[i,]))))
+}
 
 #19bp
-nrow(cpp_19bp_pass_GC_threshold)
-
 cpp_19bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(cpp_19bp_pass_GC_threshold)){
-  cpp_19bp_pass_GC_threshold_Tm <- c(cpp_19bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[18,])))))
-} 
+for (i in 1:nrow(cpp_19bp_pass_GC_threshold)){
+  cpp_19bp_pass_GC_threshold_Tm <- c(cpp_19bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[i,]))))
+}
 
 #20bp
-nrow(cpp_20bp_pass_GC_threshold)
-
 cpp_20bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(cpp_20bp_pass_GC_threshold)){
-  cpp_20bp_pass_GC_threshold_Tm <- c(cpp_20bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[18,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[19,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[20,])))))
-} 
-
+for (i in 1:nrow(cpp_20bp_pass_GC_threshold)){
+  cpp_20bp_pass_GC_threshold_Tm <- c(cpp_20bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[i,]))))
+}
 
 #21bp
-nrow(cpp_21bp_pass_GC_threshold)
-
 cpp_21bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(cpp_21bp_pass_GC_threshold)){
-  cpp_21bp_pass_GC_threshold_Tm <- c(cpp_21bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[18,])))))
-} 
+for (i in 1:nrow(cpp_21bp_pass_GC_threshold)){
+  cpp_21bp_pass_GC_threshold_Tm <- c(cpp_21bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[i,]))))
+}
 
 #22bp
-nrow(cpp_22bp_pass_GC_threshold)
-
 cpp_22bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(cpp_22bp_pass_GC_threshold)){
-  cpp_22bp_pass_GC_threshold_Tm <- c(cpp_22bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[18,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[19,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[20,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[21,])))))
-} 
+for (i in 1:nrow(cpp_22bp_pass_GC_threshold)){
+  cpp_22bp_pass_GC_threshold_Tm <- c(cpp_22bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[i,]))))
+}
 
 #23bp
-nrow(cpp_23bp_pass_GC_threshold)
-
 cpp_23bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(cpp_23bp_pass_GC_threshold)){
-  cpp_23bp_pass_GC_threshold_Tm <- c(cpp_23bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[16,])))))
+for (i in 1:nrow(cpp_23bp_pass_GC_threshold)){
+  cpp_23bp_pass_GC_threshold_Tm <- c(cpp_23bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[i,]))))
 }
 
 #24bp
-nrow(cpp_24bp_pass_GC_threshold)
-
 cpp_24bp_pass_GC_threshold_Tm <- c()
-
-for (i in nrow(cpp_24bp_pass_GC_threshold)){
-  cpp_24bp_pass_GC_threshold_Tm <- c(cpp_24bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[18,])))),
-                                    (Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[19,])))))
+for (i in 1:nrow(cpp_24bp_pass_GC_threshold)){
+  cpp_24bp_pass_GC_threshold_Tm <- c(cpp_24bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[i,]))))
 }
+
 
 
 #add Tm generated to pp_#bp_pass_GC_threshold
@@ -804,6 +511,7 @@ colnames(cpp_24bp_pass_GC_threshold)[26] <- "Tm"
 
 
 #filter out the Tm that are not within 50-60 degrees
+
 
 library(dplyr)
 
