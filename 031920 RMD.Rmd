@@ -50,7 +50,7 @@ The input used to calculate the GC and Tm are the primer/complementary primer pr
 install.packages("seqinr")
   library(seqinr)
 #calculate the GC content found in the primer_precursors_23 dataframe (which corresponds to the 24bp primers) and create a new vector containing those values using the apply function
-pp_24_GC <-apply(as.matrix(primer_precursor_23), MARGIN = 1, FUN = GC)
+pp_24_GC <-apply(as.matrix(primer_precursor_23), MARGIN = 1, FUN =GC)
 ```
 
 Next, we add the numeric vector to the end of the primer_precursor data frame, labeling it as "GC Content"
@@ -81,7 +81,7 @@ the “Tm Calculator” package. Once the Tm_NN is calculated for each primer, b
 
   It is important to note that Tm_NN contains default primer concentrations to 25nM and [NA+] to 50mM. The Tm_NN function can also accommodate applications that require other concentrations of primers, or different input concentrations of other ions associated in PCR reactions, such as Mg 2+ , which is defaulted to 0 mM. It is up to the user to change the default settings. 
   
-  Additionally, it is necessary to determine how many rows are in each of the primer_precursor dataframes. Because each dataframe contains different numbers of primers that have overcome the GC threshold, it is necessary for the user to input the number of rows, which is found using the nrow function. Next, the user creates an empty vector, which will then be filled with the Tm values calculated in the for loop. The foor loop takes every row in the pp_24bp_pass_GC_threshold dataframe and runs the Tm_NN function, depositing the calculated Tm values into the pp_24bp_pass_GC_threshold_Tm vector.
+  To calculate the Tm, we first create an empty vector (pp_24bp_pass_GC_threshold_Tm). Once this empty vector is created, the colon within the for loop  creates a sequence of numbers from 1 to 15, and loops over i = 1, i= 2,etc. The for loop runs the function Tm_NN over each row of the  pp_24bp_pass_GC_threshold dataframe and creates a numeric vector containing the calcualted Tm values for that dataframe. 
 ```{r}
 #install TmCalculator package
 install.packages("TmCalculator")
@@ -91,34 +91,10 @@ library(TmCalculator)
 install.packages("Biostrings")
 library(Biostrings)
 
-#define how many rows have made it through the GC threshold
-nrow(pp_24bp_pass_GC_threshold)
-#output is 18
-
-#create an empty vector
+#24bp
 pp_24bp_pass_GC_threshold_Tm <- c()
-
-#for loop that runs the Tm_NN function over each row in the pp_24bp_pass_GC_threshold dataframe
-for (i in nrow(pp_24bp_pass_GC_threshold)){
-  pp_24bp_pass_GC_threshold_Tm <- c(pp_24bp_pass_GC_threshold_Tm, (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[1,])))), 
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[2,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[3,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[4,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[5,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[6,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[7,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[8,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[9,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[10,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[11,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[12,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[13,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[14,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[15,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[16,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[17,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[18,])))),
-                                    (Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[19,])))))
+for (i in 1:nrow(pp_24bp_pass_GC_threshold)){
+  pp_24bp_pass_GC_threshold_Tm <- c(pp_24bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[i,]))))
 }
 ```
 
@@ -164,10 +140,5 @@ and incorporate the Gibbs free energy (ΔG) of association in determining primer
 overcome this shortcoming, we recommend either using software, such as the OligoAnalyzer Tool by IDT, or the PrimerRoc algorithm developed by Johnson et al.(2019) to determine the presence of primer dimers
 once both forward and reverse strands are designed.  
 
-  Another current shortfall in our code for calculating the Tm of these primers, using the Tm_NN function, is in regards to the user inputting the number of rows present in the data frame 
-corresponding to the length of the primer. By adding in the nrow(dataframe) function, it is our hope that the user is able to determine how many rows to run the Tm_NN function over,
-and use the rbind function to take the Tm_NN of each row and create a new list of these Tm values. While this is not the most effiicent method for calculating the Tm, using the Tm_NN 
-function is considered to be the most accurate. In such, accurate calculations of melting points aid in overall PCR efficiency. Further updates on the code could ameliorate this potential
-shortcoming. 
 
 ```{r}
