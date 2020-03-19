@@ -259,6 +259,8 @@ pp_24bp_pass_GC_threshold <- filter(primer_precursor_23, primer_precursor_23$`GC
 #We will now compute the GC content of the complementary primer precursors generated from 18bp-24bp
 #workflow is similar to primer precursors
 
+library(seqinr)
+
 #calculate the gc content of each row in 18bp primers
 cpp_18_GC <-apply(as.matrix(complement_primer_precursor_17), MARGIN = 1, FUN  = GC)
 
@@ -291,7 +293,7 @@ complement_primer_precursor_23["GC Content"] <- cpp_24_GC
 
 #remove primers that are not within 0.4-0.6(40%-60%) range for GC content
 #we can do this through dplyr
-install.packages('tidyverse')
+
 library(dplyr)
 
 #if the GC content >= 0.4 and <=0.6, it will create a new file called pp_(bplength)bp_pass_GC_threshold
@@ -548,7 +550,7 @@ colnames(pp_24bp_pass_GC_threshold)[26] <- "Tm"
 
 #filter out the Tm that are not within 50-60 degrees
 
-install.packages('tidyverse')
+
 library(dplyr)
 
 #use the dplyr filter function to filter melting temperatures between 50-60 degrees.The primers that meet this criteria will be 
@@ -580,7 +582,7 @@ pp_24bp_pass_GC_and_Tm_threshold <- filter(pp_24bp_pass_GC_threshold, pp_24bp_pa
 #############################################################################################
 #calculate the Tm of the complementary primer precursors
 
-install.packages('TmCalculator')
+
 library(TmCalculator)
 #
 ##there are three different ways to calcualte Tm, based off of GC/based off of other nucleotides, and the Wallace Method (good for primer 14-20bp)
@@ -589,7 +591,7 @@ library(TmCalculator)
 #you can change the input of the pcr reaction ionic concentrations using this method
 ##we will need to convert into strings in order for this function to work
 
-install.packages("Biostrings")
+
 library(Biostrings)
 
 #18bp primers by row
@@ -803,7 +805,6 @@ colnames(cpp_24bp_pass_GC_threshold)[26] <- "Tm"
 
 #filter out the Tm that are not within 50-60 degrees
 
-install.packages('tidyverse')
 library(dplyr)
 
 #use the dplyr filter function to filter melting temperatures between 50-60 degrees.The primers that meet this criteria will be 
