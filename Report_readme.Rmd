@@ -24,8 +24,10 @@ Two data frames: 1) all appropriate primers around position “b”, from 5’ t
 ### Example:
 The user would like to amplify by PCR between 1680bp to 1900bp within the human TET2 gene. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
 ```{r}
+
+#set working directory to where the downloaded repository is
 library(dplyr)
-plasmid_sequence <- read.delim("./human TET2 sequene single strand.txt", header = FALSE, stringsAsFactors = FALSE)
+plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', header = FALSE, stringsAsFactors = FALSE)
 
 #assign value to b: b is the position in a gene where we want primers;
 #here is an example: we want primers around 1680bp, so b=1680, and you can use any numbers
@@ -168,7 +170,7 @@ From the example in part 2, I am including a code for the primer and complement 
 library(tidyverse)
 
 #in the full code, this list is made with all primers 
-Allprimerprecursors<-list(p_24bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_24bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_24bp_pass_GC_and_Tm_threshold))])
+Allprimerprecursors<-list(pp_24bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_24bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_24bp_pass_GC_and_Tm_threshold))])
 
 
 list_of_good_primer_precursors <- list()
