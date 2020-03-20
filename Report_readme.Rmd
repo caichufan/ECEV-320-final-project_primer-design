@@ -204,7 +204,7 @@ In the full R code,I used tibble from tidyverse to get the complement sequence b
 
 
 ## 4.Strengths of our code:
-All primers generated are from 5’ to 3’, so no further reverse complement is needed.
+If sending primers to be produced by companies, primers are required to be from 5' to 3'. All primers generated from our code are from 5’ to 3’, so no further reverse complement is needed.
 
 ## 5.Shortages of our code:
 
