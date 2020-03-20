@@ -1,8 +1,8 @@
-#import raw data and library
 
-setwd("/Users/caichufan/Library/Mobile Documents/com~apple~CloudDocs/final project")
+#import raw data and library
+setwd("~/")
 library(dplyr)
-plasmid_sequence <- read.delim("human TET2 sequene single strand.txt", header = FALSE, stringsAsFactors = FALSE)
+plasmid_sequence <- read.delim("./human TET2 sequene single strand.txt", header = FALSE, stringsAsFactors = FALSE)
 
 #assign value to b: b is the position in a gene where we want primers;
 #here is an example: we want primers around 1680bp, so b=1680, and you can use any numbers
@@ -14,8 +14,8 @@ b <- 1680
 
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
 plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL, 
-                             check.rows = FALSE, check.names = TRUE, 
-                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                               check.rows = FALSE, check.names = TRUE, 
+                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
 #based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
 #a = primer length -1
@@ -26,8 +26,8 @@ for (i in 0:a){
   primer_precursor_17 <- rbind(primer_precursor_17, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 
 primer_precursor_17 <- data.frame(primer_precursor_17, row.names = NULL, 
-                               check.rows = FALSE, check.names = TRUE, 
-                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                  check.rows = FALSE, check.names = TRUE, 
+                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
 a <- 18
 primer_precursor_18 <- NULL
@@ -93,15 +93,15 @@ primer_precursors <- bind_rows(primer_precursor_17, primer_precursor_18, primer_
 #make complememt plamisd sequence, and extract all primers in the complemented version of this plasmid sequence (from 3' to 5')
 
 plasmid_sequence <- read.delim("human TET2 sequene single strand.txt", header = FALSE
-                                          , stringsAsFactors = FALSE)
+                               , stringsAsFactors = FALSE)
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
 plasmid_sequence <- paste(unlist(plasmid_sequence), collapse='')
 complement_plasmid_sequence <- chartr("ATGC","TACG", plasmid_sequence)
 complement_plasmid_sequence <- as.character(complement_plasmid_sequence)
 complement_plasmid_sequence <- strsplit(complement_plasmid_sequence,"")
 complement_plasmid_sequence <- data.frame(complement_plasmid_sequence[1], row.names = NULL, 
-                               check.rows = FALSE, check.names = TRUE, 
-                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                          check.rows = FALSE, check.names = TRUE, 
+                                          fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
 a <- 17
 complement_primer_precursor_17 <- NULL
@@ -109,8 +109,8 @@ for (i in 0:a){
   complement_primer_precursor_17 <- rbind(complement_primer_precursor_17, 
                                           complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 complement_primer_precursor_17 <- data.frame(complement_primer_precursor_17, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                             check.rows = FALSE, check.names = TRUE, 
+                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 #reverse the columns of this dataframe, so that primers are from 5' to 3'
 complement_primer_precursor_17 = complement_primer_precursor_17[ ,order(ncol(complement_primer_precursor_17):1)]
 
@@ -120,8 +120,8 @@ for (i in 0:a){
   complement_primer_precursor_18 <- rbind(complement_primer_precursor_18, 
                                           complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 complement_primer_precursor_18 <- data.frame(complement_primer_precursor_18, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                             check.rows = FALSE, check.names = TRUE, 
+                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 complement_primer_precursor_18 = complement_primer_precursor_18[ ,order(ncol(complement_primer_precursor_18):1)]
 
 
@@ -131,8 +131,8 @@ for (i in 0:a){
   complement_primer_precursor_19 <- rbind(complement_primer_precursor_19, 
                                           complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 complement_primer_precursor_19 <- data.frame(complement_primer_precursor_19, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                             check.rows = FALSE, check.names = TRUE, 
+                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 complement_primer_precursor_19 = complement_primer_precursor_19[ ,order(ncol(complement_primer_precursor_19):1)]
 
 a <- 20
@@ -142,8 +142,8 @@ for (i in 0:a){
                                           complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 
 complement_primer_precursor_20 <- data.frame(complement_primer_precursor_20, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                             check.rows = FALSE, check.names = TRUE, 
+                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 complement_primer_precursor_20 = complement_primer_precursor_20[ ,order(ncol(complement_primer_precursor_20):1)]
 
 a <- 21
@@ -152,8 +152,8 @@ for (i in 0:a){
   complement_primer_precursor_21 <- rbind(complement_primer_precursor_21, 
                                           complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 complement_primer_precursor_21 <- data.frame(complement_primer_precursor_21, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                             check.rows = FALSE, check.names = TRUE, 
+                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 complement_primer_precursor_21 = complement_primer_precursor_21[ ,order(ncol(complement_primer_precursor_21):1)]
 
 a <- 22
@@ -163,8 +163,8 @@ for (i in 0:a){
                                           complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 
 complement_primer_precursor_22 <- data.frame(complement_primer_precursor_22, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                             check.rows = FALSE, check.names = TRUE, 
+                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 complement_primer_precursor_22 = complement_primer_precursor_22[ ,order(ncol(complement_primer_precursor_22):1)]
 
 a <- 23
@@ -173,8 +173,8 @@ for (i in 0:a){
   complement_primer_precursor_23 <- rbind(complement_primer_precursor_23, 
                                           complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
 complement_primer_precursor_23 <- data.frame(complement_primer_precursor_23, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                                             check.rows = FALSE, check.names = TRUE, 
+                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 complement_primer_precursor_23 = complement_primer_precursor_23[ ,order(ncol(complement_primer_precursor_23):1)]
 
 
@@ -184,7 +184,7 @@ complement_primer_precursors <- bind_rows(complement_primer_precursor_17, comple
                                           complement_primer_precursor_23, .id = NULL)
 
 
-                                          
+
 #####################################################################################################################
 ##Emma Code for primer precursor, GC
 #We will first compute the GC content of the primer precursors generated from 18bp-24bp
@@ -541,48 +541,20 @@ cpp_23bp_pass_GC_and_Tm_threshold <- filter(cpp_23bp_pass_GC_threshold, cpp_23bp
 cpp_24bp_pass_GC_and_Tm_threshold <- filter(cpp_24bp_pass_GC_threshold, cpp_24bp_pass_GC_threshold$Tm >=50, cpp_24bp_pass_GC_threshold$Tm <=60)
 
 
--------------------------------------------------------------------------------------------------------------------------------
-Ange
------------------------------------------------------------------------------------------------------------------------------------
+#######################################
+#Ange's code
+########################################
+library(tidyverse)
 
 
-###############################################################################################3
-#### Ange's Code: Finding primers and complement primer strands that begin and end with G/C
-###############################################################################################
+Allprimerprecursors<-list(pp_18bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_18bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_18bp_pass_GC_and_Tm_threshold))],
+                          pp_19bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_19bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_19bp_pass_GC_and_Tm_threshold))],
+                          pp_20bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_20bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_20bp_pass_GC_and_Tm_threshold))],
+                          pp_21bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_21bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_21bp_pass_GC_and_Tm_threshold))],
+                          pp_22bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_22bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_22bp_pass_GC_and_Tm_threshold))],
+                          pp_23bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_23bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_23bp_pass_GC_and_Tm_threshold))],
+                          pp_24bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_24bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_24bp_pass_GC_and_Tm_threshold))])
 
-
-### Complement strand
-Allcomplementprecursors<-list(complement_primer_precursor_17,complement_primer_precursor_18,
-     complement_primer_precursor_19,complement_primer_precursor_20,
-     complement_primer_precursor_21,complement_primer_precursor_22,
-     complement_primer_precursor_23)
-
-list_of_good_complement_precursors <- list()
-
-for(file in Allcomplementprecursors){
-  #removing rows that start with A or T
-whichcol <-1
-Lastcall <- file[ ,whichcol]
-NotAorT<- !(Lastcall %in% c("A","T"))
-file <-file[NotAorT, ]
-
-#removing rows that end with A or T
-whichcol <-ncol(file)
-Lastcall <- file[ ,whichcol]
-NotAorT<- !(Lastcall %in% c("A","T"))
-list_of_good_complement_precursors[[ncol(file) - 17]] <- file[NotAorT, ]
- 
-}
-
-good_complement_precursors <- bind_rows(list_of_good_complement_precursors)
-good_complement_precursors
-
-####### Primer precursor strand 
-
-Allprimerprecursors<-list(primer_precursor_17,primer_precursor_18,
-                              primer_precursor_19,primer_precursor_20,
-                              primer_precursor_21,primer_precursor_22,
-                              primer_precursor_23)
 
 list_of_good_primer_precursors <- list()
 for(file in Allprimerprecursors){
@@ -601,9 +573,20 @@ for(file in Allprimerprecursors){
 }
 
 good_primer_precursors <- bind_rows(list_of_good_primer_precursors)
-good_primer_precursors
 
 
+#get the complement sequence based off the forward sequence (change A to T, etc.)
+complement_primer_precursors <- as_tibble(apply(good_primer_precursors, 2, chartr, old = "ATGC", new = "TACG"))
+#reverse the complement sequence so that it too is written from 5' to 3'
+good_complement_primer_precursors <- complement_primer_precursors %>% select(ncol(complement_primer_precursors):1)
 
-                                       
+
+final_list_of_forward_primers <- good_primer_precursors %>% 
+  unite("Primer", X1:X24, na.rm = TRUE, sep = "")
+
+final_list_of_forward_complement_primers <- good_complement_primer_precursors %>% 
+  unite("Complment 5-3 Primer", X24:X1, na.rm = TRUE, sep = "")
+
+knitr::kable(final_list_of_forward_primers)
+knitr::kable(final_list_of_forward_complement_primers)
 
