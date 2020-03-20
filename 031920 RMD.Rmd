@@ -46,6 +46,7 @@ function found in the “seqinr” package. Shown is the workflow for the 24bp p
 The input used to calculate the GC and Tm are the primer/complementary primer precursors generated in Part I mentioned above.In this example, we use the 24bp primer precursor as the input. Using the package "seqinr", we will then fun the function "GC" over each row of the dataframe containing the 24bp primer precursors. The apply function is used in this example to run the GC function (FUN=GC) over each row (MARGIN =1). The output is then a numeric vector corresponding to the GC content of these primers. 
 
 ```{r}
+options(repos="https://cran.rstudio.com" )
 #install seqinr package
 install.packages("seqinr")
   library(seqinr)
