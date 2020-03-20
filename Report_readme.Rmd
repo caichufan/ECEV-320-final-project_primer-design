@@ -11,11 +11,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ## 1.Why primer design is important:
-Primer is needed for sequencing a DNA sequence, and primer pairs are needed for PCR. However, primer design sometimes can be time-consuming, because many factors need to be taken into consideration. Otherwise sequencing or PCR can't proceed successfully, or returns incorrect information. 
+Primer is needed for sequencing a DNA sequence, and primer pairs are needed for PCR. However, primer design sometimes can be time-consuming, because many factors need to be taken into consideration. If incorrect primers are used, sequencing or PCR can't proceed successfully, or even returns incorrect information. 
 
 ## 2.How the code works:
 
-### Input: 
+### Input (requires manual operation): 
 1) a DNA sequence (the single strand DNA from a double strand DNA) arranged from 5’ to 3’ in a .txt file, not space, tab or comma separated and all upper case. 
 2) the exact position where the primers are required, enter as “b” in the code.
 3) requires that user to setwd to where the downloaded repository is for the beginning directory.
