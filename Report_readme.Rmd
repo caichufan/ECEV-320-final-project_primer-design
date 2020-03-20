@@ -10,10 +10,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-ECEV320 final project: primer design
-Ange Uwimana, Chufan Cai, Emma Wilkinson
-
 ## 1.Why primer design is important:
 
 ## 2.How the code works:
