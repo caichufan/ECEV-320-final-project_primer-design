@@ -1,7 +1,5 @@
 #import raw data and library
-setwd("~/")
 library(dplyr)
-
 
 #setwd to where the downloaded repository is 
 plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', header = FALSE, stringsAsFactors = FALSE)
