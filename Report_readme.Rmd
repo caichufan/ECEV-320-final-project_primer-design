@@ -125,6 +125,51 @@ This process is also repeated for all complementary primer precursors. The outpu
 
 ### Part III: (Ange)
 Get rid of precursors that don’t start or end with ½ G/C. 
+The goal of my code is to generate primers and complement primers that begin and end with a G or a C. The importance of designing a primer that has G and C bases at the beginning ( 3’ end ) and end (5’ end ) is to ensure the correct binding at the 3’ and 5’ ends due to the stronger hydrogen bonding that exists between G and C. This overall contributes to higher stability through increased melting temperature of the primer and template than it would if the primer started and ended with AT bonds. 
+
+From the example in part 2, I am including a code for the primer and complement precursor with 24 base pairs. The full code is shown Rstudio. In my code, I loaded tidyverse package which contains central data structures for use later in the code. Next, I generate a list of all primer precursors from Emma’s code that generates primers that meet the G/C content and melting temperature threshold. From that list, I exclude the first column of every primer precursor that begin with A or T and I do the same for the last column of every primer precursor. This in the end, generates another list of good primer precursors which begin and end with G/C pairs.
+
+```{r}
+#######################################
+#Ange's code: Finding primers and complement primer strands that begin with G/C pairs 
+########################################
+library(tidyverse)
+
+#in the full code, this list is made with all primers 
+Allprimerprecursors<-list(p_24bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_24bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_24bp_pass_GC_and_Tm_threshold))])
+
+
+list_of_good_primer_precursors <- list()
+for(file in Allprimerprecursors){
+  whichcol <-1
+  Lastcall <- file[ ,whichcol]
+  NotAorT<- !(Lastcall %in% c("A","T"))
+  file <-file[NotAorT, ]
+  
+  
+  whichcol <-ncol(file)
+  Lastcall <- file[ ,whichcol]
+  NotAorT<- !(Lastcall %in% c("A","T"))
+  file <-file[NotAorT, ]
+  list_of_good_primer_precursors[[ncol(file) - 17]] <- file
+  
+}
+```
+
+Now that we have the final primers, we just need to format the final output and can print it in a table
+
+```{r}
+good_primer_precursors <- bind_rows(list_of_good_primer_precursors)
+
+final_list_of_forward_primers <- good_primer_precursors %>% 
+  unite("Primer", X1:X24, na.rm = TRUE, sep = "")
+
+
+knitr::kable(final_list_of_forward_primers)
+```
+
+In the full R code,I used tibble from tidyverse to get the complement sequence based off the forward sequence (change A to T, etc.). Next, I reversed the complement sequence so that it too is written from 5' to 3'. Finally, my code unites and prints a final list of primer and complement primer precursors that begin and end with G/C pairs. 
+
 
 ## 4.Strengths of our code:
 All primers generated are from 5’ to 3’, so no further reverse complement is needed.
