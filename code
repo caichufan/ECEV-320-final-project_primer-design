@@ -542,11 +542,11 @@ cpp_24bp_pass_GC_and_Tm_threshold <- filter(cpp_24bp_pass_GC_threshold, cpp_24bp
 
 
 #######################################
-#Ange's code
+#Ange's code: Finding primers and complement primer strands that begin with G/C pairs 
 ########################################
 library(tidyverse)
 
-
+# Generate a list of primers based on Emma's code 
 Allprimerprecursors<-list(pp_18bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_18bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_18bp_pass_GC_and_Tm_threshold))],
                           pp_19bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_19bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_19bp_pass_GC_and_Tm_threshold))],
                           pp_20bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_20bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_20bp_pass_GC_and_Tm_threshold))],
@@ -555,7 +555,7 @@ Allprimerprecursors<-list(pp_18bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_18bp_pass
                           pp_23bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_23bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_23bp_pass_GC_and_Tm_threshold))],
                           pp_24bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_24bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_24bp_pass_GC_and_Tm_threshold))])
 
-
+# Exclude primer precursors that begin and end with A or T 
 list_of_good_primer_precursors <- list()
 for(file in Allprimerprecursors){
   whichcol <-1
@@ -580,13 +580,14 @@ complement_primer_precursors <- as_tibble(apply(good_primer_precursors, 2, chart
 #reverse the complement sequence so that it too is written from 5' to 3'
 good_complement_primer_precursors <- complement_primer_precursors %>% select(ncol(complement_primer_precursors):1)
 
-
+#Unite a final list of primer and complement primer precursors that begin and end with G/C pairs 
 final_list_of_forward_primers <- good_primer_precursors %>% 
   unite("Primer", X1:X24, na.rm = TRUE, sep = "")
 
 final_list_of_forward_complement_primers <- good_complement_primer_precursors %>% 
   unite("Complment 5-3 Primer", X24:X1, na.rm = TRUE, sep = "")
-
+  
+# Print a final list of good primers and complement primers that begin and end with G/C pairs 
 knitr::kable(final_list_of_forward_primers)
 knitr::kable(final_list_of_forward_complement_primers)
 
