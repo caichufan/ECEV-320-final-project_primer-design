@@ -26,7 +26,7 @@ Ange Uwimana, Chufan Cai, Emma Wilkinson
 Two data frames: 1) all appropriate primers around position “b”, from 5’ to 3’; 2) all appropriate complement primers around position “b”, from 5’ to 3’;
 
 ### Example:
-    The user would like to amplify by PCR between 1680bp to 1900bp within the human TET2 gene. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
+The user would like to amplify by PCR between 1680bp to 1900bp within the human TET2 gene. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
 
 ## 3.Dissection of each part of the code:
 
