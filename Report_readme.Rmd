@@ -23,6 +23,38 @@ Two data frames: 1) all appropriate primers around position “b”, from 5’ t
 
 ### Example:
 The user would like to amplify by PCR between 1680bp to 1900bp within the human TET2 gene. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
+```{r}
+library(dplyr)
+plasmid_sequence <- read.delim("./human TET2 sequene single strand.txt", header = FALSE, stringsAsFactors = FALSE)
+
+#assign value to b: b is the position in a gene where we want primers;
+#here is an example: we want primers around 1680bp, so b=1680, and you can use any numbers
+
+b <- 1680
+
+#----------------------------------------------------------------------------------------------------------------
+#clean up raw data and convert to data frame format (from 5' to 3')
+
+plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
+plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL, 
+                               check.rows = FALSE, check.names = TRUE, 
+                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
+
+#based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
+#a = primer length -1
+
+
+
+a <- 23
+primer_precursor_23 <- NULL
+for (i in 0:a){
+  primer_precursor_23 <- rbind(primer_precursor_23, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
+
+primer_precursor_23 <- data.frame(primer_precursor_23, row.names = NULL, 
+                                  check.rows = FALSE, check.names = TRUE, 
+                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+
+```
 
 ## 3.Dissection of each part of the code:
 
