@@ -4,8 +4,8 @@ setwd("~/")
 library(dplyr)
 
 
-#after cloning the repository (say to desktop), download the TET2.txt file within the repository
-plasmid_sequence <-read.delim("ECEV-320-final-project_primer-design-master/data.human TET2 sequence single strand.txt", header = FALSE, stringsAsFactors = FALSE)
+#setwd to where the downloaded repository is 
+plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', header = FALSE, stringsAsFactors = FALSE)
 
 #assign value to b: b is the position in a gene where we want primers;
 #here is an example: we want primers around 1680bp, so b=1680, and you can use any numbers
@@ -95,7 +95,7 @@ primer_precursors <- bind_rows(primer_precursor_17, primer_precursor_18, primer_
 #---------------------------------------------------------------------------------------------------------------
 #make complememt plamisd sequence, and extract all primers in the complemented version of this plasmid sequence (from 3' to 5')
 
-plasmid_sequence <- read.delim("ECEV-320-final-project_primer-design-master/data.human TET2 sequence single strand.txt", header = FALSE, stringsAsFactors = FALSE)
+plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', header = FALSE, stringsAsFactors = FALSE)
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
 plasmid_sequence <- paste(unlist(plasmid_sequence), collapse='')
 complement_plasmid_sequence <- chartr("ATGC","TACG", plasmid_sequence)
