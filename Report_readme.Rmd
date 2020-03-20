@@ -36,9 +36,9 @@ plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', head
 
 b <- 1680
 
-
-
 ```
+
+image: ![](Graphical abstract.png)
 
 ## 3.Dissection of each part of the code:
 
