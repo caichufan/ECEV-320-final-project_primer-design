@@ -1,6 +1,6 @@
 ---
-title: '031920.1'
-author: "Ange, Chufan, Emma"
+title: 'ECEV320 Final Project: Primer Design'
+author: "Ange Uwimana, Chufan Cai, Emma Wilkinson"
 date: "3/19/2020"
 output:
   pdf_document: default
