@@ -57,7 +57,7 @@ plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL,
                                fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
 #based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
-#a = primer length -1
+#a = primer length -1; here we use primer length 24 bp as an example
 
 a <- 23
 primer_precursor_23 <- NULL
@@ -69,7 +69,7 @@ primer_precursor_23 <- data.frame(primer_precursor_23, row.names = NULL,
                                   fix.empty.names = TRUE, stringsAsFactors=FALSE)
 ```
 
-Conduct same extraction for primer length 19,20...24. All primers are in dataframe format. In the end, combine all the dataframes generated, and name it as "primer precursors". 
+Conduct same extraction for primer length 18, 19, 20...23. All primers are in dataframe format. In the end, combine all the dataframes generated, and name it as "primer precursors". 
 Then, complement the original DNA sequence, since DNA is double stranded. and extracts all possible complement primers as what previously did. However, since this is complement sequence, one more step is needed: reverse the columns, so that primers are still from 5' to 3'. Print out all primers and name it as "complement primer precursors".
 "primer precursors" and "complement primer precursors" are good now, and further filter is needed in Part II and III.
 
