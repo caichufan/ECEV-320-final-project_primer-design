@@ -36,7 +36,19 @@ plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', head
 
 b <- 1680
 
-#----------------------------------------------------------------------------------------------------------------
+
+
+```
+
+## 3.Dissection of each part of the code:
+
+### Part I: (Chufan)
+Import a DNA sequence, extract all possible primer precursors and complement primer precursors with a length ranging from 18 to 24 bp. 
+With 18 to 24 bp, this length range is long enough for adequate specificity and short enough for primers to bind easily to the template at the annealing temperature.
+
+My code first converts the DNA sequence from a .txt file to a dataframe. Then extracts all possible primers around position "b" with a length of 18bp: print all nucleotides between position "b-18" to "b+18". 
+
+```{r}
 #clean up raw data and convert to data frame format (from 5' to 3')
 
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
@@ -47,8 +59,6 @@ plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL,
 #based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
 #a = primer length -1
 
-
-
 a <- 23
 primer_precursor_23 <- NULL
 for (i in 0:a){
@@ -57,16 +67,9 @@ for (i in 0:a){
 primer_precursor_23 <- data.frame(primer_precursor_23, row.names = NULL, 
                                   check.rows = FALSE, check.names = TRUE, 
                                   fix.empty.names = TRUE, stringsAsFactors=FALSE)
-
 ```
 
-## 3.Dissection of each part of the code:
-
-### Part I: (Chufan)
-Import a DNA sequence, extract all possible primer precursors and complement primer precursors with a length ranging from 18 to 24 bp. 
-
-With 18 to 24 bp, this length range is long enough for adequate specificity and short enough for primers to bind easily to the template at the annealing temperature.
-My code first converts the DNA sequence from a .txt file to a dataframe. Then extracts all possible primers around position "b" with a length of 18bp: print all nucleotides between position "b-18" to "b+18". Conduct same extraction for primer length 19,20...24. All primers are in dataframe format. In the end, combine all the dataframes generated, and name it as "primer precursors". 
+Conduct same extraction for primer length 19,20...24. All primers are in dataframe format. In the end, combine all the dataframes generated, and name it as "primer precursors". 
 Then, complement the original DNA sequence, since DNA is double stranded. and extracts all possible complement primers as what previously did. However, since this is complement sequence, one more step is needed: reverse the columns, so that primers are still from 5' to 3'. Print out all primers and name it as "complement primer precursors".
 "primer precursors" and "complement primer precursors" are good now, and further filter is needed in Part II and III.
 
