@@ -14,26 +14,26 @@ knitr::opts_chunk$set(echo = TRUE)
 ECEV320 final project: primer design
 Ange Uwimana, Chufan Cai, Emma Wilkinson
 
-# 1.Why primer design is important:
+## 1.Why primer design is important:
 
-# 2.How the code works:
+## 2.How the code works:
 
-## Input: 
+### Input: 
 1) a DNA sequence (the single strand DNA from a double strand DNA) arranged from 5’ to 3’ in a .txt file, not space, tab or comma separated and all upper case. 
 2) the exact position where the primers are required, enter as “b” in the code.
 
-## Output:
+### Output:
 Two data frames: 1) all appropriate primers around position “b”, from 5’ to 3’; 2) all appropriate complement primers around position “b”, from 5’ to 3’;
 
-## Example:
+### Example:
     The user would like to amplify by PCR between 1680bp to 1900bp within the human TET2 gene. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
 
-# 3.Dissection of each part of the code:
+## 3.Dissection of each part of the code:
 
-## Part I: 
+### Part I: 
 Import DNA sequence, extract all possible primers and complement primers (precursors) with length range from 18 to 24 bp. (Chufan)
 
-## Part II: 
+### Part II: 
 Keep precursors that have 40-60% GC content, and have a melting temperature (Tm) of 50-60°C. (Emma) 
 
 i.The guanine-cytosine (GC) content of a primer is the percentage of guanine and cytosine present in a DNA sequence. The GC            
@@ -127,13 +127,13 @@ pp_24bp_pass_GC_and_Tm_threshold <- filter(pp_24bp_pass_GC_threshold, pp_24bp_pa
 
 This process is also repeated for all complementary primer precursors. The output of the expanded code should include primers precursors and complementary primer precursors that have a GC content betwwen 0.4-0.6 and a melting temperature 50°-60°C. Once both forward and reverse primers are designed (see Part I) it is recommended that forward and reverse primers be within 5° of each other to ensure that the PCR reaction occurs efficiently on both sides of the gene of interest.
 
-## Part III: 
+### Part III: 
 Get rid of precursors that don’t start or end with ½ G/C. (Ange) 
 
-# 4.Strengths of our code:
+## 4.Strengths of our code:
 All primers generated are from 5’ to 3’, so no further reverse complement is needed.
 
-# 5.Shortages of our code:
+## 5.Shortages of our code:
 
   Whether the primers are self or double complemented hasn’t been tested. Primer pairs should have a Tm within 5°C of each other. Make sure there are no highly repetitive sequences. You can look at primer pairs and filter out those that have >4 repeats. 
 Primer pairs should not have complementary regions. Primer pairs should have a Tm within 5°C of each other.(Need to explain why-I note why we cant have the primers have complementary regions below)
