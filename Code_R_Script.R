@@ -3,7 +3,9 @@ list.of.packages <- c("dplyr", "seqinr", "TmCalculator", "tidyverse")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
-#setwd to where the downloaded repository is 
+library(dplyr)
+
+#make sure getwd to where the downloaded repository is 
 plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', header = FALSE, stringsAsFactors = FALSE)
 
 #assign value to b: b is the position in a gene where we want primers;
