@@ -52,10 +52,6 @@ library(TmCalculator)
 #you can change the input of the pcr reaction ionic concentrations using this method
 ##we will need to convert into strings in order for this function to work
 
-install.packages("Biostrings")
-library(Biostrings)
-
-
 ####create empty vector and then run function over the rows
 #In the for loop the colon creates a sequence of numbers from 1 to 15, and loops over i = 1, i= 2, .... 
 
@@ -68,7 +64,7 @@ for (i in 1:nrow(primer_precursors_pass_GC_threshold)){
 #add list to the end of the complement_primer_precursors_pass_GC_threshold called "Tm"
 primer_precursors_pass_GC_threshold["Tm"] <-pp_pass_GC_threshold_Tm
 
-#filter out GC content that is not between 0.4-0.6
+#filter out GC content that is not between 50-60
 primer_precursors_pass_GC_and_Tm_threshold <-filter(primer_precursors_pass_GC_threshold, primer_precursors_pass_GC_threshold$Tm >= 50, primer_precursors_pass_GC_threshold$Tm <=60)
 
 
@@ -86,7 +82,7 @@ for (i in 1:nrow(complement_primer_precursors_pass_GC_threshold)){
 #add list to the end of the complement_primer_precursors_pass_GC_threshold called "Tm"
 complement_primer_precursors_pass_GC_threshold["Tm"] <-cpp_pass_GC_threshold_Tm
 
-#filter out GC content that is not between 0.4-0.6 
+#filter out GC content that is not between 50-60
 complement_primer_precursors_pass_GC_and_Tm_threshold <-filter(complement_primer_precursors_pass_GC_threshold, complement_primer_precursors_pass_GC_threshold$Tm >= 50, complement_primer_precursors_pass_GC_threshold$Tm <=60)
 
 
