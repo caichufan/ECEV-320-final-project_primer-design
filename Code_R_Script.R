@@ -201,138 +201,48 @@ complement_primer_precursors <- bind_rows(complement_primer_precursor_17, comple
 
 
 #####################################################################################################################
+#####################################################################################################################
 ##Emma Code for primer precursor, GC
 #We will first compute the GC content of the primer precursors generated from 18bp-24bp
 #We will use the R package,  seqinr  which is frequently used by biologists for sequence manipulation
-
-install.packages("seqinr")
+install.packages(seqinr)
 library(seqinr)
 
-#calculate the gc content of each row in 18bp primers
-pp_18_GC <-apply(as.matrix(primer_precursor_17), MARGIN = 1, FUN = GC)
+#calculate the GC content of each row in pimer_precursors df
+#change NA to N, as the functions are already coded to ignore "N" functions in the default settings
+######primer_precursors
+#change NA to N
+primer_precursors[is.na(primer_precursors)] <- "N"
 
-#calculate the gc content of each row in 19bp primers
-pp_19_GC <-apply(as.matrix(primer_precursor_18), MARGIN = 1, FUN = GC)
+#Calculate GC 
+pp_GC <-apply(as.matrix(primer_precursors), MARGIN = 1, FUN = GC)
 
-#calculate the gc content of each row in 20bp primers
-pp_20_GC <-apply(as.matrix(primer_precursor_19), MARGIN = 1, FUN = GC)
+#add list to the end of the complement_primer_precursors df called "GC content"
+primer_precursors["GC Content"] <- pp_GC
 
-#calculate the gc content of each row in 21bp primers
-pp_21_GC <-apply(as.matrix(primer_precursor_20), MARGIN = 1, FUN = GC)
-
-#calculate the gc content of each row in 22bp primers
-pp_22_GC <-apply(as.matrix(primer_precursor_21), MARGIN = 1, FUN = GC)
-
-#calculate the gc content of each row in 23bp primers
-pp_23_GC <-apply(as.matrix(primer_precursor_22), MARGIN = 1, FUN = GC)
-
-#calculate the gc content of each row in 24bp primers
-pp_24_GC <-apply(as.matrix(primer_precursor_23), MARGIN = 1, FUN = GC)
-
-#merge data so that the potential primers have their associated GC
-primer_precursor_17["GC Content"] <- pp_18_GC
-primer_precursor_18["GC Content"] <- pp_19_GC
-primer_precursor_19["GC Content"] <- pp_20_GC
-primer_precursor_20["GC Content"] <- pp_21_GC
-primer_precursor_21["GC Content"] <- pp_22_GC
-primer_precursor_22["GC Content"] <- pp_23_GC
-primer_precursor_23["GC Content"] <- pp_24_GC
-
-#remove primers that are not within 0.4-0.6(40%-60%) range for GC content
-#we can do this through dplyr
-install.packages('tidyverse')
-library(dplyr)
-
-#if the GC content >= 0.4 and <=0.6, it will create a new file called pp_(bplength)bp_pass_GC_threshold
+#filter out GC content that is not between 0.4-0.6, using dplyr
+#if the GC content >= 0.4 and <=0.6, it will create a new file called primer_precursors_pass_GC_threshold
 ##output are primers that contain 0.4-0.6 (or, 40%-60%) GC content
 
-#18bp
-pp_18bp_pass_GC_threshold <- filter(primer_precursor_17, primer_precursor_17$`GC Content` >= 0.4, primer_precursor_17$`GC Content`<= 0.6)
+primer_precursors_pass_GC_threshold <-filter(primer_precursors, primer_precursors$`GC Content` >= 0.4,primer_precursors$'GC Content' <= 0.6)
 
-#19bp
-pp_19bp_pass_GC_threshold <- filter(primer_precursor_18, primer_precursor_18$`GC Content` >= 0.4, primer_precursor_18$`GC Content`<= 0.6)
-
-#20bp
-pp_20bp_pass_GC_threshold <- filter(primer_precursor_19, primer_precursor_19$`GC Content` >= 0.4, primer_precursor_19$`GC Content`<= 0.6)
-
-#21bp
-pp_21bp_pass_GC_threshold <- filter(primer_precursor_20, primer_precursor_20$`GC Content` >= 0.4, primer_precursor_20$`GC Content`<= 0.6)
-
-#22bp
-pp_22bp_pass_GC_threshold <- filter(primer_precursor_21, primer_precursor_21$`GC Content` >= 0.4, primer_precursor_21$`GC Content`<= 0.6)
-
-#23bp
-pp_23bp_pass_GC_threshold <- filter(primer_precursor_22, primer_precursor_22$`GC Content` >= 0.4, primer_precursor_22$`GC Content`<= 0.6)
-
-#24bp
-pp_24bp_pass_GC_threshold <- filter(primer_precursor_23, primer_precursor_23$`GC Content` >= 0.4, primer_precursor_23$`GC Content`<= 0.6)
 
 ################################################################################################################################################################################################################################
-#We will now compute the GC content of the complementary primer precursors generated from 18bp-24bp
+#We will now compute the GC content of the complementary_primer_precursors df
 #workflow is similar to primer precursors
+#change NA to N
+complement_primer_precursors[is.na(complement_primer_precursors)] <- "N"
 
-library(seqinr)
-#calculate the gc content of each row in 18bp primers
-cpp_18_GC <-apply(as.matrix(complement_primer_precursor_17), MARGIN = 1, FUN  = GC)
+#Calculate GC
+cpp_GC <-apply(as.matrix(complement_primer_precursors), MARGIN = 1, FUN = GC)
 
-#calculate the gc content of each row in 19bp primers
-cpp_19_GC <-apply(as.matrix(complement_primer_precursor_18), MARGIN = 1, FUN  = GC)
+#add list to the end of the complement_primer_precursors DF called "GC content"
+complement_primer_precursors["GC Content"] <- cpp_GC
 
-#calculate the gc content of each row in 20bp primers
-cpp_20_GC <-apply(as.matrix(complement_primer_precursor_19), MARGIN = 1, FUN  = GC)
+#filter out GC content that is not between 0.4-0.6
+complement_primer_precursors_pass_GC_threshold <-filter(complement_primer_precursors, complement_primer_precursors$`GC Content` >= 0.4,complement_primer_precursors$`GC Content`<= 0.6)
 
-#calculate the gc content of each row in 21bp primers
-cpp_21_GC <-apply(as.matrix(complement_primer_precursor_20), MARGIN = 1, FUN  = GC)
-
-#calculate the gc content of each row in 22bp primers
-cpp_22_GC <-apply(as.matrix(complement_primer_precursor_21), MARGIN = 1, FUN  = GC)
-
-#calculate the gc content of each row in 23bp primers
-cpp_23_GC <- apply(as.matrix(complement_primer_precursor_22), MARGIN = 1, FUN  = GC)
-
-#calculate the gc content of each row in 24bp primers
-cpp_24_GC <-apply(as.matrix(complement_primer_precursor_23), MARGIN = 1, FUN  = GC)
-
-#merge data so that the potential primers have their associated GC
-complement_primer_precursor_17["GC Content"] <- cpp_18_GC
-complement_primer_precursor_18["GC Content"] <- cpp_19_GC
-complement_primer_precursor_19["GC Content"] <- cpp_20_GC
-complement_primer_precursor_20["GC Content"] <- cpp_21_GC
-complement_primer_precursor_21["GC Content"] <- cpp_22_GC
-complement_primer_precursor_22["GC Content"] <- cpp_23_GC
-complement_primer_precursor_23["GC Content"] <- cpp_24_GC
-
-#remove primers that are not within 0.4-0.6(40%-60%) range for GC content
-#we can do this through dplyr
-
-library(dplyr)
-
-#if the GC content >= 0.4 and <=0.6, it will create a new file called pp_(bplength)bp_pass_GC_threshold
-##output are primers that contain 0.4-0.6 (or, 40%-60%) GC content
-
-#18bp
-cpp_18bp_pass_GC_threshold <- filter(complement_primer_precursor_17, complement_primer_precursor_17$`GC Content` >= 0.4, complement_primer_precursor_17$`GC Content`<= 0.6)
-
-#19bp
-cpp_19bp_pass_GC_threshold <- filter(complement_primer_precursor_18, complement_primer_precursor_18$`GC Content` >= 0.4, complement_primer_precursor_18$`GC Content`<= 0.6)
-
-#20bp
-cpp_20bp_pass_GC_threshold <- filter(complement_primer_precursor_19, complement_primer_precursor_19$`GC Content` >= 0.4, complement_primer_precursor_19$`GC Content`<= 0.6)
-
-#21bp
-cpp_21bp_pass_GC_threshold <- filter(complement_primer_precursor_20, complement_primer_precursor_20$`GC Content` >= 0.4, complement_primer_precursor_20$`GC Content`<= 0.6)
-
-#22bp
-cpp_22bp_pass_GC_threshold <- filter(complement_primer_precursor_21, complement_primer_precursor_21$`GC Content` >= 0.4, complement_primer_precursor_21$`GC Content`<= 0.6)
-
-#23bp
-cpp_23bp_pass_GC_threshold <- filter(complement_primer_precursor_22, complement_primer_precursor_22$`GC Content` >= 0.4, complement_primer_precursor_22$`GC Content`<= 0.6)
-
-#24
-cpp_24bp_pass_GC_threshold <- filter(complement_primer_precursor_23, complement_primer_precursor_23$`GC Content` >= 0.4, complement_primer_precursor_23$`GC Content`<= 0.6)
-
-
-#############################################################################################################################################
+################################################################################################################################################################################################################################
 #now to calculate the Tm of the primer precursors
 
 ###calculate the Tm of a primer through the TmCalculator package
@@ -345,216 +255,37 @@ library(TmCalculator)
 #you can change the input of the pcr reaction ionic concentrations using this method
 ##we will need to convert into strings in order for this function to work
 
-install.packages("Biostrings")
-library(Biostrings)
-
-
 ####create empty vector and then run function over the rows
 #In the for loop the colon creates a sequence of numbers from 1 to 15, and loops over i = 1, i= 2, .... 
 
-#18bp
-pp_18bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_18bp_pass_GC_threshold)){
-  pp_18bp_pass_GC_threshold_Tm <- c(pp_18bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_18bp_pass_GC_threshold[i,]))))
+#calculate Tm
+pp_pass_GC_threshold_Tm <- c()
+for (i in 1:nrow(primer_precursors_pass_GC_threshold)){
+  pp_pass_GC_threshold_Tm <- c(pp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(primer_precursors_pass_GC_threshold[i,]))))
 }
 
-#19bp
-pp_19bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_19bp_pass_GC_threshold)){
-  pp_19bp_pass_GC_threshold_Tm <- c(pp_19bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_19bp_pass_GC_threshold[i,]))))
+#add list to the end of the complement_primer_precursors_pass_GC_threshold called "Tm"
+primer_precursors_pass_GC_threshold["Tm"] <-pp_pass_GC_threshold_Tm
+
+#filter out GC content that is not between 50-60
+primer_precursors_pass_GC_and_Tm_threshold <-filter(primer_precursors_pass_GC_threshold, primer_precursors_pass_GC_threshold$Tm >= 50, primer_precursors_pass_GC_threshold$Tm <=60)
+
+
+################################################################################################################################################################################################################################
+#now to calculate the Tm of the complementary_primer_precursors
+#workflow is similar to primer_precursors
+
+#calculate Tm
+cpp_pass_GC_threshold_Tm <- c()
+for (i in 1:nrow(complement_primer_precursors_pass_GC_threshold)){
+  cpp_pass_GC_threshold_Tm <- c(cpp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(complement_primer_precursors_pass_GC_threshold[i,]))))
 }
 
-#20bp
-pp_20bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_20bp_pass_GC_threshold)){
-  pp_20bp_pass_GC_threshold_Tm <- c(pp_20bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_20bp_pass_GC_threshold[i,]))))
-}
+#add list to the end of the complement_primer_precursors_pass_GC_threshold called "Tm"
+complement_primer_precursors_pass_GC_threshold["Tm"] <-cpp_pass_GC_threshold_Tm
 
-#21bp
-pp_21bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_21bp_pass_GC_threshold)){
-  pp_21bp_pass_GC_threshold_Tm <- c(pp_21bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_21bp_pass_GC_threshold[i,]))))
-}
-
-#22bp
-pp_22bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_22bp_pass_GC_threshold)){
-  pp_22bp_pass_GC_threshold_Tm <- c(pp_22bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_22bp_pass_GC_threshold[i,]))))
-}
-
-#23bp
-pp_23bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_23bp_pass_GC_threshold)){
-  pp_23bp_pass_GC_threshold_Tm <- c(pp_23bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_23bp_pass_GC_threshold[i,]))))
-}
-
-#24bp
-pp_24bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_24bp_pass_GC_threshold)){
-  pp_24bp_pass_GC_threshold_Tm <- c(pp_24bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[i,]))))
-}
-
-
-#add Tm generated to pp_#bp_pass_GC_threshold
-pp_18bp_pass_GC_threshold <-cbind(pp_18bp_pass_GC_threshold, pp_18bp_pass_GC_threshold_Tm)
-pp_19bp_pass_GC_threshold <-cbind(pp_19bp_pass_GC_threshold, pp_19bp_pass_GC_threshold_Tm)
-pp_20bp_pass_GC_threshold <-cbind(pp_20bp_pass_GC_threshold, pp_20bp_pass_GC_threshold_Tm)
-pp_21bp_pass_GC_threshold <-cbind(pp_21bp_pass_GC_threshold, pp_21bp_pass_GC_threshold_Tm)
-pp_22bp_pass_GC_threshold <-cbind(pp_22bp_pass_GC_threshold, pp_22bp_pass_GC_threshold_Tm)
-pp_23bp_pass_GC_threshold <-cbind(pp_23bp_pass_GC_threshold, pp_23bp_pass_GC_threshold_Tm)
-pp_24bp_pass_GC_threshold <-cbind(pp_24bp_pass_GC_threshold, pp_24bp_pass_GC_threshold_Tm)
-
-#rename new column generated "Tm"
-colnames(pp_18bp_pass_GC_threshold)[20] <- "Tm"
-colnames(pp_19bp_pass_GC_threshold)[21] <- "Tm"
-colnames(pp_20bp_pass_GC_threshold)[22] <- "Tm"
-colnames(pp_21bp_pass_GC_threshold)[23] <- "Tm"
-colnames(pp_22bp_pass_GC_threshold)[24] <- "Tm"
-colnames(pp_23bp_pass_GC_threshold)[25] <- "Tm"
-colnames(pp_24bp_pass_GC_threshold)[26] <- "Tm"
-
-#filter out the Tm that are not within 50-60 degrees
-
-library(dplyr)
-
-#use the dplyr filter function to filter melting temperatures between 50-60 degrees.The primers that meet this criteria will be 
-#placed into a new dataframe called pp_#bp_pass_GC_and_Tm_threshold
-
-
-#18bp
-pp_18bp_pass_GC_and_Tm_threshold <- filter(pp_18bp_pass_GC_threshold, pp_18bp_pass_GC_threshold$Tm >=50, pp_18bp_pass_GC_threshold$Tm <=60)
-
-#19bp
-pp_19bp_pass_GC_and_Tm_threshold <- filter(pp_19bp_pass_GC_threshold, pp_19bp_pass_GC_threshold$Tm >=50, pp_19bp_pass_GC_threshold$Tm <=60)
-
-#20bp
-pp_20bp_pass_GC_and_Tm_threshold <- filter(pp_20bp_pass_GC_threshold, pp_20bp_pass_GC_threshold$Tm >=50, pp_20bp_pass_GC_threshold$Tm <=60)
-
-#21bp
-pp_21bp_pass_GC_and_Tm_threshold <- filter(pp_21bp_pass_GC_threshold, pp_21bp_pass_GC_threshold$Tm >=50, pp_21bp_pass_GC_threshold$Tm <=60)
-
-#22bp
-pp_22bp_pass_GC_and_Tm_threshold <- filter(pp_22bp_pass_GC_threshold, pp_22bp_pass_GC_threshold$Tm >=50, pp_22bp_pass_GC_threshold$Tm <=60)
-
-#23bp
-pp_23bp_pass_GC_and_Tm_threshold <- filter(pp_23bp_pass_GC_threshold, pp_23bp_pass_GC_threshold$Tm >=50, pp_23bp_pass_GC_threshold$Tm <=60)
-
-#24bp
-pp_24bp_pass_GC_and_Tm_threshold <- filter(pp_24bp_pass_GC_threshold, pp_24bp_pass_GC_threshold$Tm >=50, pp_24bp_pass_GC_threshold$Tm <=60)
-
-
-#############################################################################################
-#calculate the Tm of the complementary primer precursors
-#workflow is similar to primer precursors Tm calculation
-
-
-library(TmCalculator)
-#
-##there are three different ways to calcualte Tm, based off of GC/based off of other nucleotides, and the Wallace Method (good for primer 14-20bp)
-
-##we will use the Tm_NN function which takes into account the bases as well as ionic concentrations of the PCR reaction
-#you can change the input of the pcr reaction ionic concentrations using this method
-##we will need to convert into strings in order for this function to work
-
-
-library(Biostrings)
-
-####create empty vector and then run function over the rows
-#In the for loop the colon creates a sequence of numbers from 1 to 15, and loops over i = 1, i= 2, .... 
-
-#18bp
-cpp_18bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(cpp_18bp_pass_GC_threshold)){
-  cpp_18bp_pass_GC_threshold_Tm <- c(cpp_18bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_18bp_pass_GC_threshold[i,]))))
-}
-
-#19bp
-cpp_19bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(cpp_19bp_pass_GC_threshold)){
-  cpp_19bp_pass_GC_threshold_Tm <- c(cpp_19bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_19bp_pass_GC_threshold[i,]))))
-}
-
-#20bp
-cpp_20bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(cpp_20bp_pass_GC_threshold)){
-  cpp_20bp_pass_GC_threshold_Tm <- c(cpp_20bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_20bp_pass_GC_threshold[i,]))))
-}
-
-#21bp
-cpp_21bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(cpp_21bp_pass_GC_threshold)){
-  cpp_21bp_pass_GC_threshold_Tm <- c(cpp_21bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_21bp_pass_GC_threshold[i,]))))
-}
-
-#22bp
-cpp_22bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(cpp_22bp_pass_GC_threshold)){
-  cpp_22bp_pass_GC_threshold_Tm <- c(cpp_22bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_22bp_pass_GC_threshold[i,]))))
-}
-
-#23bp
-cpp_23bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(cpp_23bp_pass_GC_threshold)){
-  cpp_23bp_pass_GC_threshold_Tm <- c(cpp_23bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_23bp_pass_GC_threshold[i,]))))
-}
-
-#24bp
-cpp_24bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(cpp_24bp_pass_GC_threshold)){
-  cpp_24bp_pass_GC_threshold_Tm <- c(cpp_24bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(cpp_24bp_pass_GC_threshold[i,]))))
-}
-
-
-
-#add Tm generated to pp_#bp_pass_GC_threshold
-cpp_18bp_pass_GC_threshold <-cbind(cpp_18bp_pass_GC_threshold, cpp_18bp_pass_GC_threshold_Tm)
-cpp_19bp_pass_GC_threshold <-cbind(cpp_19bp_pass_GC_threshold, cpp_19bp_pass_GC_threshold_Tm)
-cpp_20bp_pass_GC_threshold <-cbind(cpp_20bp_pass_GC_threshold, cpp_20bp_pass_GC_threshold_Tm)
-cpp_21bp_pass_GC_threshold <-cbind(cpp_21bp_pass_GC_threshold, cpp_21bp_pass_GC_threshold_Tm)
-cpp_22bp_pass_GC_threshold <-cbind(cpp_22bp_pass_GC_threshold, cpp_22bp_pass_GC_threshold_Tm)
-cpp_23bp_pass_GC_threshold <-cbind(cpp_23bp_pass_GC_threshold, cpp_23bp_pass_GC_threshold_Tm)
-cpp_24bp_pass_GC_threshold <-cbind(cpp_24bp_pass_GC_threshold, cpp_24bp_pass_GC_threshold_Tm)
-
-#rename new column generated "Tm"
-colnames(cpp_18bp_pass_GC_threshold)[20] <- "Tm"
-colnames(cpp_19bp_pass_GC_threshold)[21] <- "Tm"
-colnames(cpp_20bp_pass_GC_threshold)[22] <- "Tm"
-colnames(cpp_21bp_pass_GC_threshold)[23] <- "Tm"
-colnames(cpp_22bp_pass_GC_threshold)[24] <- "Tm"
-colnames(cpp_23bp_pass_GC_threshold)[25] <- "Tm"
-colnames(cpp_24bp_pass_GC_threshold)[26] <- "Tm"
-
-
-#filter out the Tm that are not within 50-60 degrees
-
-
-library(dplyr)
-
-#use the dplyr filter function to filter melting temperatures between 50-60 degrees.The primers that meet this criteria will be 
-#placed into a new dataframe called pp_#bp_pass_GC_and_Tm_threshold
-
-
-#18bp
-cpp_18bp_pass_GC_and_Tm_threshold <- filter(cpp_18bp_pass_GC_threshold, cpp_18bp_pass_GC_threshold$Tm >=50, cpp_18bp_pass_GC_threshold$Tm <=60)
-
-#19bp
-cpp_19bp_pass_GC_and_Tm_threshold <- filter(cpp_19bp_pass_GC_threshold, cpp_19bp_pass_GC_threshold$Tm >=50, cpp_19bp_pass_GC_threshold$Tm <=60)
-
-#20bp
-cpp_20bp_pass_GC_and_Tm_threshold <- filter(cpp_20bp_pass_GC_threshold, cpp_20bp_pass_GC_threshold$Tm >=50, cpp_20bp_pass_GC_threshold$Tm <=60)
-
-#21bp
-cpp_21bp_pass_GC_and_Tm_threshold <- filter(cpp_21bp_pass_GC_threshold, cpp_21bp_pass_GC_threshold$Tm >=50, cpp_21bp_pass_GC_threshold$Tm <=60)
-
-#22bp
-cpp_22bp_pass_GC_and_Tm_threshold <- filter(cpp_22bp_pass_GC_threshold, cpp_22bp_pass_GC_threshold$Tm >=50, cpp_22bp_pass_GC_threshold$Tm <=60)
-
-#23bp
-cpp_23bp_pass_GC_and_Tm_threshold <- filter(cpp_23bp_pass_GC_threshold, cpp_23bp_pass_GC_threshold$Tm >=50, cpp_23bp_pass_GC_threshold$Tm <=60)
-
-#24bp
-cpp_24bp_pass_GC_and_Tm_threshold <- filter(cpp_24bp_pass_GC_threshold, cpp_24bp_pass_GC_threshold$Tm >=50, cpp_24bp_pass_GC_threshold$Tm <=60)
-
+#filter out GC content that is not between 50-60
+complement_primer_precursors_pass_GC_and_Tm_threshold <-filter(complement_primer_precursors_pass_GC_threshold, complement_primer_precursors_pass_GC_threshold$Tm >= 50, complement_primer_precursors_pass_GC_threshold$Tm <=60)
 
 #######################################
 #Ange's code: Finding primers and complement primer strands that begin with G/C pairs 
