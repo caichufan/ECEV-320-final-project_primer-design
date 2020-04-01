@@ -153,6 +153,8 @@ complement_primer_precursors <- bind_rows(complement_primer_precursor_17, comple
 #calculate the GC content of each row in pimer_precursors df
 #change NA to N, as the functions are already coded to ignore "N" functions in the default settings
 ######primer_precursors
+library(seqinr)
+library(TmCalculator)
 #change NA to N
 primer_precursors[is.na(primer_precursors)] <- "N"
 
@@ -207,7 +209,7 @@ for (i in 1:nrow(primer_precursors_pass_GC_threshold)){
 #add list to the end of the complement_primer_precursors_pass_GC_threshold called "Tm"
 primer_precursors_pass_GC_threshold["Tm"] <-pp_pass_GC_threshold_Tm
 
-#filter out GC content that is not between 0.4-0.6
+#filter out Tm that is not between 50-60
 primer_precursors_pass_GC_and_Tm_threshold <-filter(primer_precursors_pass_GC_threshold, primer_precursors_pass_GC_threshold$Tm >= 50, primer_precursors_pass_GC_threshold$Tm <=60)
 
 
@@ -225,7 +227,7 @@ for (i in 1:nrow(complement_primer_precursors_pass_GC_threshold)){
 #add list to the end of the complement_primer_precursors_pass_GC_threshold called "Tm"
 complement_primer_precursors_pass_GC_threshold["Tm"] <-cpp_pass_GC_threshold_Tm
 
-#filter out GC content that is not between 0.4-0.6 
+#filter out Tm that is not between 50-60
 complement_primer_precursors_pass_GC_and_Tm_threshold <-filter(complement_primer_precursors_pass_GC_threshold, complement_primer_precursors_pass_GC_threshold$Tm >= 50, complement_primer_precursors_pass_GC_threshold$Tm <=60)
 
 
