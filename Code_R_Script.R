@@ -23,75 +23,21 @@ plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL,
 
 #based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
 #a = primer length -1
-
-a <- 17
-primer_precursor_17 <- NULL
-for (i in 0:a){
-  primer_precursor_17 <- rbind(primer_precursor_17, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-primer_precursor_17 <- data.frame(primer_precursor_17, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
-
-a <- 18
-primer_precursor_18 <- NULL
-for (i in 0:a){
-  primer_precursor_18 <- rbind(primer_precursor_18, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-primer_precursor_18 <- data.frame(primer_precursor_18, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
-
-a <- 19
-primer_precursor_19 <- NULL
-for (i in 0:a){
-  primer_precursor_19 <- rbind(primer_precursor_19, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-primer_precursor_19 <- data.frame(primer_precursor_19, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
-
-a <- 20
-primer_precursor_20 <- NULL
-for (i in 0:a){
-  primer_precursor_20 <- rbind(primer_precursor_20, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-primer_precursor_20 <- data.frame(primer_precursor_20, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
-
-a <- 21
-primer_precursor_21 <- NULL
-for (i in 0:a){
-  primer_precursor_21 <- rbind(primer_precursor_21, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-primer_precursor_21 <- data.frame(primer_precursor_21, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
-
-a <- 22
-primer_precursor_22 <- NULL
-for (i in 0:a){
-  primer_precursor_22 <- rbind(primer_precursor_22, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-primer_precursor_22 <- data.frame(primer_precursor_22, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
-
-a <- 23
-primer_precursor_23 <- NULL
-for (i in 0:a){
-  primer_precursor_23 <- rbind(primer_precursor_23, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-primer_precursor_23 <- data.frame(primer_precursor_23, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
+primer_precursor_producer <- function(a){
+  primer_precursor <- NULL
+  for (i in 0:a){
+    primer_precursor <- rbind(primer_precursor, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
+    primer_precursor <- data.frame(primer_precursor, row.names = NULL, 
+                                    check.rows = FALSE, check.names = TRUE, 
+                                    fix.empty.names = TRUE, stringsAsFactors=FALSE)
+  return(primer_precursor)
+}
 
 #combine all primers generated with a length range from 18bp to 22 bp
-primer_precursors <- bind_rows(primer_precursor_17, primer_precursor_18, primer_precursor_19, 
-                               primer_precursor_20, primer_precursor_21, primer_precursor_22, 
-                               primer_precursor_23, .id = NULL)
-
+primer_precursors <- bind_rows(primer_precursor_producer(17), primer_precursor_producer(18), 
+                               primer_precursor_producer(19), primer_precursor_producer(20),
+                               primer_precursor_producer(21), primer_precursor_producer(22),
+                               primer_precursor_producer(23), .id = NULL)
 
 #---------------------------------------------------------------------------------------------------------------
 #make complememt plamisd sequence, and extract all primers in the complemented version of this plasmid sequence (from 3' to 5')
