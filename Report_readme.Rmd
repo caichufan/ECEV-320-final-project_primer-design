@@ -226,20 +226,32 @@ for(file in Allprimerprecursors){
 }
 ```
 
-Now that we have the final primers, we just need format the final output, clean it to get rid of Ns and print it in a table
+Now that we have the final primers, we just need format the final output, clean it to get rid of Ns, generate a list, dataframe and print it in a table
 
 ```{r}
 good_primer_precursors <- bind_rows(list_of_good_primer_precursors)
 
-final_list_of_forward_primers <- good_primer_precursors %>% 
-  unite("Primer", X1:X24, na.rm = TRUE, sep = "")
+#Unite a final list of primer and complement primer precursors that begin and end with G/C pairs 
+final_list_of_primers <- good_primer_precursors %>% 
+  unite("Primer", X1:X24, sep = "")
+
+# Generate data frame and list of primers
+
+final_list_of_primers$Primer <- str_replace_all(final_list_of_primers[['Primer']], "N", "")
+
+primers_dataframe <- as.data.frame(final_list_of_primers[['Primer']])
+
+primers_list <- list(final_list_of_primers[['Primer']])
 
 
+# Print a final list of good primers that begin and end with G/C pairs along with their GC Content and Tm
 knitr::kable(final_list_of_primers)
+
+
 ```
 
 
-In the full R code,I used tibble from tidyverse to get the complement sequence based off the forward sequence (change A to T, etc.). Next,I generated a list and data frame of primers and complement primers that start and end with G/C pairs. Finally, my code unites and prints a final table of primer and complement primer that begin and end with G/C pairs along with the GC content and Tm. 
+In the full R code,I used tibble from tidyverse to get the complement sequence based off the forward sequence (change A to T, etc.). Next,I generated a list and data frame of complement primers that start and end with G/C pairs. Finally, my code unites and prints a final table of complement primer that begin and end with G/C pairs along with the GC content and Tm. 
 
 
 ## 4.Strengths of our code:
