@@ -164,7 +164,7 @@ complement_primer_precursors_pass_GC_and_Tm_threshold <-filter(complement_primer
 
 library(tidyverse)
 # Generate a list of primers based on Emma's code 
-Allprimerprecursors <- list(primer_precursors_pass_GC_and_Tm_threshold)
+Allprimerprecursors <- list(replace(primer_precursors_pass_GC_and_Tm_threshold, primer_precursors_pass_GC_and_Tm_threshold == "N", "NA"))
 
 # Exclude primer precursors that begin and end with A or T 
 list_of_good_primer_precursors <- list()
