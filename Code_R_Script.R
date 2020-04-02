@@ -22,7 +22,7 @@ plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL,
                              fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
 #based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
-#a = primer length -1, and difine a function for a
+#a = primer length -1, and define a function for "a"
 
 primer_precursor_producer <- function(a){
   primer_precursor <- NULL
