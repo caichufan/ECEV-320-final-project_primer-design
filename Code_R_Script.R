@@ -196,7 +196,7 @@ final_list_of_forward_primers <- good_primer_precursors %>%
   unite("Primer", X1:X24, na.rm = TRUE, sep = "")
 
 final_list_of_forward_complement_primers <- good_complement_primer_precursors %>% 
-  unite("Complment 5-3 Primer", X24:X1, na.rm = TRUE, sep = "")
+  unite("Complement 5-3 Primer", X24:X1, na.rm = TRUE, sep = "")
 
 # Print a final list of good primers and complement primers that begin and end with G/C pairs 
 knitr::kable(final_list_of_forward_primers)
