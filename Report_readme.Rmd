@@ -179,8 +179,6 @@ primer_precursors_pass_GC_threshold["Tm"] <-pp_pass_GC_threshold_Tm
 
 As previously mentioned, high GC content can contribute to a high melting temperature, as a higher melting temperature is needed to break the triple hydrogen bond present between the G-C base pair. Therefore, it is commonly recommended that the primer Tm is between 50°-60°C. Melting temperatures above this range can increase the probability of secondary annealing. 
 
-Our next step is to filter the melting temperatures that are within 50°-60°C. To do this, we add the vector containing the Tm, pp_24bp_pass_GC_threshold_Tm, and add it to the pp_24bp_pass_GC_threshold dataframe using the cbind function. We then rename that column "Tm". In this case, this was the 26th row (#bp +2), but this will change for bp of other sizes.
-
 To filter, we use the filter function within dplyr, similar to what was used to filter the GC content. This function is used to filter the melting temperatures of the primers that are between 50°-60°C. The primers that have a melting temperature within this range are filtered into a dataframe labeled primer_precursors_pass_GC_and_Tm_threshold.
   
 ```{r}
