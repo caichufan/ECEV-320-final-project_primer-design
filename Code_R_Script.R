@@ -46,7 +46,7 @@ for (i in 17:23){
 #make complememt plamisd sequence, and extract all primers in the 
 #complemented version of this plasmid sequence (from 3' to 5')
 
-plasmid_sequence <- read.delim("human TET2 sequene single strand.txt", header = FALSE
+plasmid_sequence <- read.delim("data.human TET2 sequence single strand.txt", header = FALSE
                                           , stringsAsFactors = FALSE)
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
 plasmid_sequence <- paste(unlist(plasmid_sequence), collapse='')
