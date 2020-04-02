@@ -75,7 +75,7 @@ for (i in 17:23){
 
 #reverse the columns of this dataframe, so that primers are from 5' to 3'
 complement_primer_precursors <- complement_primer_precursors[ ,order(ncol(complement_primer_precursors):1)]
-names(complement_primer_precursors) <- NULL
+#names(complement_primer_precursors) <- NULL
 
 
 
