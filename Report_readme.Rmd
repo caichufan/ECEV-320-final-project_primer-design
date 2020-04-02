@@ -79,7 +79,7 @@ i.The guanine-cytosine (GC) content of a primer is the percentage of guanine and
 content is calculated by: (Count(G+C)/(Count(A+C+T+G). The GC content is presented as a decimal, corresponding to a %. G-C base pairs, 
 unlike A-T base pairs, have a unique triple hydrogen bond, which are harder to break, and can contribute to the overall stability of the primer. 
 Additionally, primers with high GC content have higher melting temperatures. Therefore, it is common practice to design PCR primers to have a GC 
-content within a range of 0.4-0.6 (or 40%-60%). This intermediate range ensures that the primers have sufficient stability without contributing 
+content within a range of 40-60%. This intermediate range ensures that the primers have sufficient stability without contributing 
 to a high melting temperature. 
   
 Our code first generates the GC content of all of the primer and complementary primer precursors. The GC content is calculated using the “GC” 
