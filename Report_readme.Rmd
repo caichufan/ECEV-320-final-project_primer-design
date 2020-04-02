@@ -24,11 +24,18 @@ Two data frames: 1) all appropriate primers around position “b”, from 5’ t
 
 ### Example:
 The user would like to amplify by PCR between 1680bp to 1900bp within the human TET2 gene. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
+
+
+image: ![](Graphical abstract.png)
+
+## 3.Dissection of each part of the code:
+
+### Part I: (Chufan)
+Import a DNA sequence, extract all possible primer_precursors and complement_primer_precursors with a length ranging from 18 to 24 bp. Note: this length range is long enough for adequate specificity and short enough for primers to bind easily to the template at the annealing temperature.
+
+First, my code imports the .txt DNA file, and converts the DNA to a dataframe. After giving the value "b", the primer extraction can be started. 
+
 ```{r}
-list.of.packages <- c("dplyr", "seqinr", "TmCalculator", "tidyverse")
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-options(repos="https://cran.rstudio.com" )
 
 #set working directory to where the downloaded repository is
 library(dplyr)
@@ -39,42 +46,73 @@ plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', head
 
 b <- 1680
 
+plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
+plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL, 
+                             check.rows = FALSE, check.names = TRUE, 
+                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
+
 ```
 
-image: ![](Graphical abstract.png)
-
-## 3.Dissection of each part of the code:
-
-### Part I: (Chufan)
-Import a DNA sequence, extract all possible primer precursors and complement primer precursors with a length ranging from 18 to 24 bp. 
-With 18 to 24 bp, this length range is long enough for adequate specificity and short enough for primers to bind easily to the template at the annealing temperature.
-
-My code first converts the DNA sequence from a .txt file to a dataframe. Then extracts all possible primers around position "b" with a length of 18bp: print all nucleotides between position "b-18" to "b+18". 
+Secondly, my code extracts all primer_precursors around position "b" with a length of 18bp to 24bp: print all nucleotides between position "b-18" to "b+18" (or other length).
+All primers are in dataframe format. In the end, combine all the dataframes generated, and name it as "primer_precursors".
 
 ```{r}
 #clean up raw data and convert to data frame format (from 5' to 3')
 
+primer_precursor_producer <- function(a){
+  primer_precursor <- NULL
+  for (i in 0:a){
+    primer_precursor <- rbind(primer_precursor, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
+    primer_precursor <- data.frame(primer_precursor, row.names = NULL, 
+                                    check.rows = FALSE, check.names = TRUE, 
+                                    fix.empty.names = TRUE, stringsAsFactors=FALSE)
+  return(primer_precursor)
+}
+
+#combine all primers generated with a length range from 18bp to 22 bp
+
+primer_precursors <- NULL
+for (i in 17:23){
+  primer_precursors <- bind_rows(primer_precursors, primer_precursor_producer(i))
+}
+```
+
+Thirdly, complement the original DNA sequence, since DNA is double stranded. and extracts all possible complement primers as what previously did. Print out all primers and name it as "complement_primer_precursors".
+
+```{r}
+plasmid_sequence <- read.delim("data.human TET2 sequence single strand.txt", header = FALSE
+                                          , stringsAsFactors = FALSE)
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
-plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL, 
+plasmid_sequence <- paste(unlist(plasmid_sequence), collapse='')
+complement_plasmid_sequence <- chartr("ATGC","TACG", plasmid_sequence)
+complement_plasmid_sequence <- as.character(complement_plasmid_sequence)
+complement_plasmid_sequence <- strsplit(complement_plasmid_sequence,"")
+complement_plasmid_sequence <- data.frame(complement_plasmid_sequence[1], row.names = NULL, 
                                check.rows = FALSE, check.names = TRUE, 
                                fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
-#based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
-#a = primer length -1; here we use primer length 24 bp as an example
+complement_primer_precursor_producer <- function(a){
+  complement_primer_precursor <- NULL
+  for (i in 0:a){
+   complement_primer_precursor <- rbind(complement_primer_precursor, 
+                                            complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
+   complement_primer_precursor <- data.frame(complement_primer_precursor, row.names = NULL, 
+                                               check.rows = FALSE, check.names = TRUE, 
+                                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
+  
+   #complement_primer_precursor <- complement_primer_precursor[ ,order(ncol(complement_primer_precursor):1)]
+   #names(complement_primer_precursor) <- NULL
+   return(complement_primer_precursor)
+}
 
-a <- 23
-primer_precursor_23 <- NULL
-for (i in 0:a){
-  primer_precursor_23 <- rbind(primer_precursor_23, plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
+complement_primer_precursors <- NULL
+for (i in 17:23){
+  complement_primer_precursors <- bind_rows(complement_primer_precursors, complement_primer_precursor_producer(i))
+}
 
-primer_precursor_23 <- data.frame(primer_precursor_23, row.names = NULL, 
-                                  check.rows = FALSE, check.names = TRUE, 
-                                  fix.empty.names = TRUE, stringsAsFactors=FALSE)
 ```
 
-Conduct same extraction for primer length 18, 19, 20...23. All primers are in dataframe format. In the end, combine all the dataframes generated, and name it as "primer precursors". 
-Then, complement the original DNA sequence, since DNA is double stranded. and extracts all possible complement primers as what previously did. However, since this is complement sequence, one more step is needed: reverse the columns, so that primers are still from 5' to 3'. Print out all primers and name it as "complement primer precursors".
-"primer precursors" and "complement primer precursors" are good now, and further filter is needed in Part II and III.
+To summarize, "primer_precursors" and "complement_primer_precursors" are generated, and further filter steps are in Part II and III.
 
 ### Part II: (Emma)
 Keep precursors that have 40-60% GC content, and have a melting temperature (Tm) of 50-60°C. 
