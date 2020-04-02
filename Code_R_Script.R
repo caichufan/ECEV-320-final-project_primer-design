@@ -162,14 +162,9 @@ complement_primer_precursors_pass_GC_and_Tm_threshold <-filter(complement_primer
 #Ange's code: Finding primers and complement primer strands that begin with G/C pairs 
 ########################################
 
+library(tidyverse)
 # Generate a list of primers based on Emma's code 
-Allprimerprecursors<-list(pp_18bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_18bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_18bp_pass_GC_and_Tm_threshold))],
-                          pp_19bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_19bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_19bp_pass_GC_and_Tm_threshold))],
-                          pp_20bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_20bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_20bp_pass_GC_and_Tm_threshold))],
-                          pp_21bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_21bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_21bp_pass_GC_and_Tm_threshold))],
-                          pp_22bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_22bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_22bp_pass_GC_and_Tm_threshold))],
-                          pp_23bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_23bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_23bp_pass_GC_and_Tm_threshold))],
-                          pp_24bp_pass_GC_and_Tm_threshold[,c(-ncol(pp_24bp_pass_GC_and_Tm_threshold) + 1, -ncol(pp_24bp_pass_GC_and_Tm_threshold))])
+Allprimerprecursors <- list(primer_precursors_pass_GC_and_Tm_threshold)
 
 # Exclude primer precursors that begin and end with A or T 
 list_of_good_primer_precursors <- list()
