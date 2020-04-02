@@ -18,11 +18,12 @@ b <- 1680
 
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
 plasmid_sequence <- data.frame(plasmid_sequence[1], row.names = NULL, 
-                               check.rows = FALSE, check.names = TRUE, 
-                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                             check.rows = FALSE, check.names = TRUE, 
+                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
 #based on the plasmid sequence, generate all primers around b position, and named "primer_precursors". 
-#a = primer length -1
+#a = primer length -1, and difine a function for a
+
 primer_precursor_producer <- function(a){
   primer_precursor <- NULL
   for (i in 0:a){
@@ -34,118 +35,50 @@ primer_precursor_producer <- function(a){
 }
 
 #combine all primers generated with a length range from 18bp to 22 bp
-primer_precursors <- bind_rows(primer_precursor_producer(17), primer_precursor_producer(18), 
-                               primer_precursor_producer(19), primer_precursor_producer(20),
-                               primer_precursor_producer(21), primer_precursor_producer(22),
-                               primer_precursor_producer(23), .id = NULL)
+
+primer_precursors <- NULL
+for (i in 17:23){
+  primer_precursors <- bind_rows(primer_precursors, primer_precursor_producer(i))
+}
+
 
 #---------------------------------------------------------------------------------------------------------------
-#make complememt plamisd sequence, and extract all primers in the complemented version of this plasmid sequence (from 3' to 5')
+#make complememt plamisd sequence, and extract all primers in the 
+#complemented version of this plasmid sequence (from 3' to 5')
 
-plasmid_sequence <-read.delim('data.human TET2 sequence single strand.txt', header = FALSE, stringsAsFactors = FALSE)
+plasmid_sequence <- read.delim("human TET2 sequene single strand.txt", header = FALSE
+                                          , stringsAsFactors = FALSE)
 plasmid_sequence <- strsplit(plasmid_sequence[1,1],"")
 plasmid_sequence <- paste(unlist(plasmid_sequence), collapse='')
 complement_plasmid_sequence <- chartr("ATGC","TACG", plasmid_sequence)
 complement_plasmid_sequence <- as.character(complement_plasmid_sequence)
 complement_plasmid_sequence <- strsplit(complement_plasmid_sequence,"")
 complement_plasmid_sequence <- data.frame(complement_plasmid_sequence[1], row.names = NULL, 
-                                          check.rows = FALSE, check.names = TRUE, 
-                                          fix.empty.names = TRUE, stringsAsFactors=FALSE)
+                               check.rows = FALSE, check.names = TRUE, 
+                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
 
-a <- 17
-complement_primer_precursor_17 <- NULL
-for (i in 0:a){
-  complement_primer_precursor_17 <- rbind(complement_primer_precursor_17, 
-                                          complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-complement_primer_precursor_17 <- data.frame(complement_primer_precursor_17, row.names = NULL, 
-                                             check.rows = FALSE, check.names = TRUE, 
-                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
+complement_primer_precursor_producer <- function(a){
+  complement_primer_precursor <- NULL
+  for (i in 0:a){
+   complement_primer_precursor <- rbind(complement_primer_precursor, 
+                                            complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
+   complement_primer_precursor <- data.frame(complement_primer_precursor, row.names = NULL, 
+                                               check.rows = FALSE, check.names = TRUE, 
+                                               fix.empty.names = TRUE, stringsAsFactors=FALSE)
+  
+   #complement_primer_precursor <- complement_primer_precursor[ ,order(ncol(complement_primer_precursor):1)]
+   #names(complement_primer_precursor) <- NULL
+   return(complement_primer_precursor)
+}
+
+complement_primer_precursors <- NULL
+for (i in 17:23){
+  complement_primer_precursors <- bind_rows(complement_primer_precursors, complement_primer_precursor_producer(i))
+}
+
 #reverse the columns of this dataframe, so that primers are from 5' to 3'
-complement_primer_precursor_17 = complement_primer_precursor_17[ ,order(ncol(complement_primer_precursor_17):1)]
-colnames(complement_primer_precursor_17) <- c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 
-                                              'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 'X18')
-
-a <- 18
-complement_primer_precursor_18 <- NULL
-for (i in 0:a){
-  complement_primer_precursor_18 <- rbind(complement_primer_precursor_18, 
-                                          complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-complement_primer_precursor_18 <- data.frame(complement_primer_precursor_18, row.names = NULL, 
-                                             check.rows = FALSE, check.names = TRUE, 
-                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
-complement_primer_precursor_18 = complement_primer_precursor_18[ ,order(ncol(complement_primer_precursor_18):1)]
-colnames(complement_primer_precursor_18) <- c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 
-                                              'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 'X18', 'X19')
-
-a <- 19
-complement_primer_precursor_19 <- NULL
-for (i in 0:a){
-  complement_primer_precursor_19 <- rbind(complement_primer_precursor_19, 
-                                          complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-complement_primer_precursor_19 <- data.frame(complement_primer_precursor_19, row.names = NULL, 
-                                             check.rows = FALSE, check.names = TRUE, 
-                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
-complement_primer_precursor_19 = complement_primer_precursor_19[ ,order(ncol(complement_primer_precursor_19):1)]
-colnames(complement_primer_precursor_19) <- c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 
-                                              'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 'X18', 'X19','X20')
-
-a <- 20
-complement_primer_precursor_20 <- NULL
-for (i in 0:a){
-  complement_primer_precursor_20 <- rbind(complement_primer_precursor_20, 
-                                          complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-complement_primer_precursor_20 <- data.frame(complement_primer_precursor_20, row.names = NULL, 
-                                             check.rows = FALSE, check.names = TRUE, 
-                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
-complement_primer_precursor_20 = complement_primer_precursor_20[ ,order(ncol(complement_primer_precursor_20):1)]
-colnames(complement_primer_precursor_20) <- c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 
-                                              'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 'X18', 'X19','X20','X21')
-
-a <- 21
-complement_primer_precursor_21 <- NULL
-for (i in 0:a){
-  complement_primer_precursor_21 <- rbind(complement_primer_precursor_21, 
-                                          complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-complement_primer_precursor_21 <- data.frame(complement_primer_precursor_21, row.names = NULL, 
-                                             check.rows = FALSE, check.names = TRUE, 
-                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
-complement_primer_precursor_21 = complement_primer_precursor_21[ ,order(ncol(complement_primer_precursor_21):1)]
-colnames(complement_primer_precursor_21) <- c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 
-                                              'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 
-                                              'X18', 'X19','X20','X21','X22')
-
-a <- 22
-complement_primer_precursor_22 <- NULL
-for (i in 0:a){
-  complement_primer_precursor_22 <- rbind(complement_primer_precursor_22, 
-                                          complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-
-complement_primer_precursor_22 <- data.frame(complement_primer_precursor_22, row.names = NULL, 
-                                             check.rows = FALSE, check.names = TRUE, 
-                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
-complement_primer_precursor_22 = complement_primer_precursor_22[ ,order(ncol(complement_primer_precursor_22):1)]
-colnames(complement_primer_precursor_22) <- c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 
-                                              'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 
-                                              'X18', 'X19','X20','X21','X22','X23')
-
-a <- 23
-complement_primer_precursor_23 <- NULL
-for (i in 0:a){
-  complement_primer_precursor_23 <- rbind(complement_primer_precursor_23, 
-                                          complement_plasmid_sequence[(b-i):(b+a-i),], .id = NULL)}
-complement_primer_precursor_23 <- data.frame(complement_primer_precursor_23, row.names = NULL, 
-                                             check.rows = FALSE, check.names = TRUE, 
-                                             fix.empty.names = TRUE, stringsAsFactors=FALSE)
-complement_primer_precursor_23 = complement_primer_precursor_23[ ,order(ncol(complement_primer_precursor_23):1)]
-colnames(complement_primer_precursor_23) <- c('X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 
-                                              'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 
-                                              'X18', 'X19','X20','X21','X22','X23','X24')
-
-complement_primer_precursors <- bind_rows(complement_primer_precursor_17, complement_primer_precursor_18, 
-                                          complement_primer_precursor_19, complement_primer_precursor_20, 
-                                          complement_primer_precursor_21, complement_primer_precursor_22, 
-                                          complement_primer_precursor_23, .id = NULL)
+complement_primer_precursors <- complement_primer_precursors[ ,order(ncol(complement_primer_precursors):1)]
+names(complement_primer_precursors) <- NULL
 
 
 
