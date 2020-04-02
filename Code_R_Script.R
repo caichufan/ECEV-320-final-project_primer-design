@@ -158,6 +158,7 @@ complement_primer_precursors_pass_GC_threshold["Tm"] <-cpp_pass_GC_threshold_Tm
 complement_primer_precursors_pass_GC_and_Tm_threshold <-filter(complement_primer_precursors_pass_GC_threshold, complement_primer_precursors_pass_GC_threshold$Tm >= 50, complement_primer_precursors_pass_GC_threshold$Tm <=60)
 
 
+
 #######################################
 #Ange's code: Finding primers and complement primer strands that begin with G/C pairs 
 ########################################
@@ -188,16 +189,28 @@ good_primer_precursors <- bind_rows(list_of_good_primer_precursors)
 
 #get the complement sequence based off the forward sequence (change A to T, etc.)
 complement_primer_precursors <- as_tibble(apply(good_primer_precursors, 2, chartr, old = "ATGC", new = "TACG"))
-#reverse the complement sequence so that it too is written from 5' to 3'
-good_complement_primer_precursors <- complement_primer_precursors %>% select(ncol(complement_primer_precursors):1)
 
 #Unite a final list of primer and complement primer precursors that begin and end with G/C pairs 
 final_list_of_forward_primers <- good_primer_precursors %>% 
-  unite("Primer", X1:X24, na.rm = TRUE, sep = "")
+  unite("Primer", X1:X24, sep = "")
 
-final_list_of_forward_complement_primers <- good_complement_primer_precursors %>% 
-  unite("Complement 5-3 Primer", X24:X1, na.rm = TRUE, sep = "")
+final_list_of_forward_primers$Primer <- str_replace_all(final_list_of_forward_primers[['Primer']], "N", "")
 
-# Print a final list of good primers and complement primers that begin and end with G/C pairs 
+# Generate data frame and list of forward primers and forward complement primers 
+primers_dataframe <- as.data.frame(final_list_of_forward_primers[['Primer']])
+
+primers_list <- list(final_list_of_forward_primers[['Primer']])
+
+final_list_of_forward_complement_primers <- complement_primer_precursors %>% 
+  unite("Complement Primer", X1:X24, sep = "")
+
+final_list_of_forward_complement_primers$`Complement Primer` <- str_replace_all(final_list_of_forward_complement_primers[['Complement Primer']], "N", "")
+
+complement_primers_dataframe <- as.data.frame(final_list_of_forward_complement_primers[['Complement Primer']])
+
+complement_primers_list <- list(final_list_of_forward_complement_primers[['Complement Primer']])
+
+
+# Print a final list of good primers and complement primers that begin and end with G/C pairs along with their GC Content and Tm
 knitr::kable(final_list_of_forward_primers)
 knitr::kable(final_list_of_forward_complement_primers)
