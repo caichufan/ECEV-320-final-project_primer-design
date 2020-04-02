@@ -17,8 +17,7 @@ Primer is needed for sequencing a DNA sequence, and primer pairs are needed for 
 
 ### Input (requires manual operation): 
 1) a DNA sequence (the single strand DNA from a double strand DNA) arranged from 5’ to 3’ in a .txt file, not space, tab or comma separated and all upper case. 
-2) the exact position where the primers are required, enter as “b” in the code.
-3) requires that user to setwd to where the downloaded repository is for the beginning directory.
+2) the exact position where the primers are required, should be manually entered as “b” in the code.
 
 ### Output:
 Two data frames: 1) all appropriate primers around position “b”, from 5’ to 3’; 2) all appropriate complement primers around position “b”, from 5’ to 3’;
