@@ -25,6 +25,10 @@ Two data frames: 1) all appropriate primers around position “b”, from 5’ t
 ### Example:
 The user would like to amplify by PCR between 1680bp to 1900bp within the human TET2 gene. First, assign “b” as “1680” and run the code, the code gives out all primers and complement primers that can be used as forward primers; Second, assign “b” as “1900” and run the code, the code gives out all primers and complement primers that can be used as reverse primers. 
 ```{r}
+list.of.packages <- c("dplyr", "seqinr", "TmCalculator", "tidyverse")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+options(repos="https://cran.rstudio.com" )
 
 #set working directory to where the downloaded repository is
 library(dplyr)
@@ -81,36 +85,33 @@ unlike A-T base pairs, have a unique triple hydrogen bond, which are harder to b
 Additionally, primers with high GC content have higher melting temperatures. Therefore, it is common practice to design PCR primers to have a GC 
 content within a range of 40-60%. This intermediate range ensures that the primers have sufficient stability without contributing 
 to a high melting temperature. 
-  
-Our code first generates the GC content of all of the primer and complementary primer precursors. The GC content is calculated using the “GC” 
-function found in the “seqinr” package. Shown is the workflow for the 24bp primer_precursors generated in Part I.
 
-The input used to calculate the GC and Tm are the primer/complementary primer precursors generated in Part I mentioned above.In this example, we use the 24bp primer precursor as the input. Using the package "seqinr", we will then fun the function "GC" over each row of the dataframe containing the 24bp primer precursors. The apply function is used in this example to run the GC function (FUN=GC) over each row (MARGIN =1). The output is then a numeric vector corresponding to the GC content of these primers. 
+
+The input used to calculate the GC and Tm are the primer/complementary primer precursors generated in Part I mentioned above.In this example, we use the  primer_precursors dataframe as the input. This dataframe contains "NA"s due to the different lengths of the primers (from 18-24bp). To overcome this obstacle, it is recommended to change the "NA"s to "N"s. The functions used to calculate the GC, and later Tm, default to ignore N values. These functions default to ignoring "N" nucleotides as it is common in Sanger/other sequencing methods to output "N" when the nucleotide (A,C,T,G) cannot be discriminated. Using the package "TmCalculator", we will then fun the function "GC" over each row of the dataframe containing theprimer precursors. The apply function is used in this example to run the GC function (FUN=GC) over each row (MARGIN =1). The output is then a numeric vector corresponding to the GC content of these primers. We then add the numeric vector to the end of the primer_precursor data frame, labeling it as "GC Content". 
 
 ```{r}
-options(repos="https://cran.rstudio.com" )
-#install seqinr package
-install.packages("seqinr")
-  library(seqinr)
-#calculate the GC content found in the primer_precursors_23 dataframe (which corresponds to the 24bp primers) and create a new vector containing those values using the apply function
-pp_24_GC <-apply(as.matrix(primer_precursor_23), MARGIN = 1, FUN =GC)
+
+library(seqinr)
+library(TmCalculator)
+#change NA to N
+primer_precursors[is.na(primer_precursors)] <- "N"
+
+#Calculate GC 
+pp_GC <-apply(as.matrix(primer_precursors), MARGIN = 1, FUN = GC)
+
+#add list to the end of the complement_primer_precursors df called "GC content"
+primer_precursors["GC Content"] <- pp_GC
 ```
 
-Next, we add the numeric vector to the end of the primer_precursor data frame, labeling it as "GC Content"
-```{r}
-#add numeric vector to primer_precursor_23 dataframe, naming it "GC Content"
-primer_precursor_23["GC Content"] <- pp_24_GC
-```
-
-After calculating the GC content of every primer (found by row), the primers that are not within the range of 0.4-0.6 ( 40%-60%) are filtered out, and a new list of the primers that meet this threshold is created. If the GC content is between >=0.4 or <= 0.6, the code will create a new file called pp_(bplength)bp_pass_GC_threshold. In this case, it is pp_24bp_pass_GC_threshold. This is done using the filter function in the dplyr library.
+After calculating the GC content of every primer (found by row), the primers that are not within the range of 40-60 are filtered out, and a new list of the primers that meet this threshold is created. If the GC content is between >=40 or <= 60, the code will create a new dataframe called primer_precursors_pass_GC_threshold.This is done using the filter function in the dplyr library.
 
 ```{r}
-#run dplyr function, filter the primer_precursors that have a GC content betwen 0.4-0.6
+#using dplyr , filter the primer_precursors that have a GC content between 40-60
 library(dplyr)
-pp_24bp_pass_GC_threshold <- filter(primer_precursor_23, primer_precursor_23$`GC Content` >= 0.4, primer_precursor_23$`GC Content`<= 0.6)
+primer_precursors_pass_GC_threshold <-filter(primer_precursors, primer_precursors$`GC Content` >= 40,primer_precursors$'GC Content' <= 60)
 ```
 
-This workflow is then continued to include the complementary_primer_precursors from 18-24bp.
+This workflow is then continued to include the complementary_primer_precursors dataframe.
    
    
 ii.The melting temperature (Tm) of a primer is also a major factor in PCR efficiency. By definition, the melting temperature of a primer is the temperaturewherein 50% of the double-stranded DNA input is dissociated into single-stranded DNA. There are many ways to calculate the Tm, with factors such as GCcontent and length of primer effecting overall Tm. A common method is using the Wallace Method, which is calculated by the following equation: Tm = 4(G + C) + 2(A + T)=°C. However, this method is known to only be accurate for primers between 14-20bp and is biased towards shorter primers, as it takes into account total primer length in the calculation. A more accurate melting temperature can be calculated using the Nearest Neighbor thermodynamics.This method is considered to be more accurate than the Wallace Method and takes into consideration not only nucleotide content, but sequence as well. A version of this formula is seen here: 
@@ -120,51 +121,41 @@ ii.The melting temperature (Tm) of a primer is also a major factor in PCR effici
   In this equation $\Delta H$ is the enthalpy change (in kcal mol-1) during which the double-stranded DNA dissociates into sinlge-stranded DNA in the initial melt step. A is equal to -0.0108 kcal mol-1, which accounts for the helix initiation during this melt phase. $\Delta S$ involves the entropy change that occurs during the initial melt phase. R is the gas constant, measured at 0.00199 kcal mol-1. C is the oligonucleotide concentration that is usually standardized between 25-50nM, depending on the application. -273.15 is a conversion factor used to convert between Kelvin and C. Additionally, [NA+] is the sodium ion concentration, standardized around 50mM. The oligonucleotide concentration and [NA+] can be changed to fit the PCR reaction. Other factors, such as ions within the PCR reaction, can shift the Tm as well.
   
   Our code takes the primers that meet the GC threshold and computes the melting temperature for these primers using the Tm_NN (nearest neighbor) function found in 
-the “Tm Calculator” package. Once the Tm_NN is calculated for each primer, by row, the primers that do not have a Tm between 50°-60°C are filtered out, similar to the GC-content workflow.The "Biostrings" package is also necessary for calcualting the Tm, as the Tm Calculator package requires strings, rather than characters, which is converted by the c2s function found within this package.
+the “Tm Calculator” package. Once the Tm_NN is calculated for each primer, by row, the primers that do not have a Tm between 50°-60°C are filtered out, similar to the GC-content workflow.
 
   It is important to note that Tm_NN contains default primer concentrations to 25nM and [NA+] to 50mM. The Tm_NN function can also accommodate applications that require other concentrations of primers, or different input concentrations of other ions associated in PCR reactions, such as Mg 2+ , which is defaulted to 0 mM. It is up to the user to change the default settings. 
   
-  To calculate the Tm, we first create an empty vector (pp_24bp_pass_GC_threshold_Tm). Once this empty vector is created, the colon within the for loop  creates a sequence of numbers from 1 to 15, and loops over i = 1, i= 2,etc. The for loop runs the function Tm_NN over each row of the  pp_24bp_pass_GC_threshold dataframe and creates a numeric vector containing the calcualted Tm values for that dataframe. 
+  To calculate the Tm, we first create an empty vector (pp_pass_GC_threshold_Tm). Once this empty vector is created, the colon within the for loop  creates a sequence of numbers, and loops over i = 1, i= 2,etc. The for loop runs the function Tm_NN over each row of the  primer_precursors_pass_GC_threshold dataframe and creates a numeric vector containing the calcualted Tm values for that dataframe named pp_pass_GC_threshold_Tm.We then add the numeric vector to the end of the primer_precursors_pass_GC_threshold data frame, labeling it as "Tm". 
+  
 ```{r}
-#install TmCalculator package
-install.packages("TmCalculator")
-library(TmCalculator)
 
-#installBiostrings pacakge
-install.packages("Biostrings")
-library(Biostrings)
-
-#24bp
-pp_24bp_pass_GC_threshold_Tm <- c()
-for (i in 1:nrow(pp_24bp_pass_GC_threshold)){
-  pp_24bp_pass_GC_threshold_Tm <- c(pp_24bp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(pp_24bp_pass_GC_threshold[i,]))))
+pp_pass_GC_threshold_Tm <- c()
+for (i in 1:nrow(primer_precursors_pass_GC_threshold)){
+  pp_pass_GC_threshold_Tm <- c(pp_pass_GC_threshold_Tm, Tm_NN(as.matrix(c2s(primer_precursors_pass_GC_threshold[i,]))))
 }
+
+#add list to the end of the complement_primer_precursors_pass_GC_threshold called "Tm"
+primer_precursors_pass_GC_threshold["Tm"] <-pp_pass_GC_threshold_Tm
+
 ```
 
 As previously mentioned, high GC content can contribute to a high melting temperature, as a higher melting temperature is needed to break the triple hydrogen bond present between the G-C base pair. Therefore, it is commonly recommended that the primer Tm is between 50°-60°C. Melting temperatures above this range can increase the probability of secondary annealing. 
 
 Our next step is to filter the melting temperatures that are within 50°-60°C. To do this, we add the vector containing the Tm, pp_24bp_pass_GC_threshold_Tm, and add it to the pp_24bp_pass_GC_threshold dataframe using the cbind function. We then rename that column "Tm". In this case, this was the 26th row (#bp +2), but this will change for bp of other sizes.
 
-To filter, we use the dplyr function, similar to what was used to filter the GC content. This function is used to filter the melting temperatures of the primers that are between 50°-60°C. The primers that have a melting temperature within this range are filtered into a dataframe labeled pp_24bp_pass_GC_and_Tm_threshold.
+To filter, we use the filter function within dplyr, similar to what was used to filter the GC content. This function is used to filter the melting temperatures of the primers that are between 50°-60°C. The primers that have a melting temperature within this range are filtered into a dataframe labeled primer_precursors_pass_GC_and_Tm_threshold.
   
 ```{r}
-#add Tm generated to pp_#bp_pass_GC_threshold
-pp_24bp_pass_GC_threshold <-cbind(pp_24bp_pass_GC_threshold, pp_24bp_pass_GC_threshold_Tm)
-
-#rename new column generated "Tm"
-colnames(pp_24bp_pass_GC_threshold)[26] <- "Tm"
-
 #filter out the Tm that are not within 50-60 degrees
 library(dplyr)
 
-#use the dplyr filter function to filter melting temperatures between 50-60 degrees.The primers that meet this criteria will be 
-#placed into a new dataframe called pp_#bp_pass_GC_and_Tm_threshold
+#filter out Tm that is not between 50-60
+primer_precursors_pass_GC_and_Tm_threshold <-filter(primer_precursors_pass_GC_threshold, primer_precursors_pass_GC_threshold$Tm >= 50, primer_precursors_pass_GC_threshold$Tm <=60)
 
-#24bp
-pp_24bp_pass_GC_and_Tm_threshold <- filter(pp_24bp_pass_GC_threshold, pp_24bp_pass_GC_threshold$Tm >=50, pp_24bp_pass_GC_threshold$Tm <=60)
+
 ```
 
-This process is also repeated for all complementary primer precursors. The output of the expanded code should include primers precursors and complementary primer precursors that have a GC content betwwen 0.4-0.6 and a melting temperature 50°-60°C. Once both forward and reverse primers are designed (see Part I) it is recommended that forward and reverse primers be within 5° of each other to ensure that the PCR reaction occurs efficiently on both sides of the gene of interest.
+This process is also repeated for all complementary primer precursors. The output of the expanded code should include primers precursors and complementary primer precursors that have a GC content betwwen 40-60 and a melting temperature 50°-60°C. Once both forward and reverse primers are designed (see Part I) it is recommended that forward and reverse primers be within 5° of each other to ensure that the PCR reaction occurs efficiently on both sides of the gene of interest.
 
 ### Part III: (Ange)
 Get rid of precursors that don’t start or end with ½ G/C. 
