@@ -73,10 +73,7 @@ for (i in 17:23){
   complement_primer_precursors <- bind_rows(complement_primer_precursors, complement_primer_precursor_producer(i))
 }
 
-#reverse the columns of this dataframe, so that primers are from 5' to 3'
-complement_primer_precursors <- complement_primer_precursors[ ,order(ncol(complement_primer_precursors):1)]
-#names(complement_primer_precursors) <- NULL
-
+#the complement primer precursprs are right now from 3' to 5'
 
 
 #############################################Emma Code
