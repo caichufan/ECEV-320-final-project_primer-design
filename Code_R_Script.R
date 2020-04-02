@@ -65,9 +65,6 @@ complement_primer_precursor_producer <- function(a){
    complement_primer_precursor <- data.frame(complement_primer_precursor, row.names = NULL, 
                                                check.rows = FALSE, check.names = TRUE, 
                                                fix.empty.names = TRUE, stringsAsFactors=FALSE)
-  
-   #complement_primer_precursor <- complement_primer_precursor[ ,order(ncol(complement_primer_precursor):1)]
-   #names(complement_primer_precursor) <- NULL
    return(complement_primer_precursor)
 }
 
